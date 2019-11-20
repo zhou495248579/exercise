@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cstgg</title>
+</head>
+<body>
+<script src="makeBind.js"></script>
+<script type="text/javascript">
+    var obj = {a:1, method: function (arg) {
+            console.log(...arguments)
+        }}
+    function test(a) {
+        console.log(arguments)
+        console.log(this, this && this.a)
+        // this.method(a);
+    }
+    // const bindTest = test.bind(obj)
+    const t = new test();
+    // test.bind(obj, 'argument1 ')('arguments')
+    // console.log(test.bind(obj))
+</script>
+</body>
+</html>
