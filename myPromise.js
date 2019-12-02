@@ -109,32 +109,32 @@ function resolvePromiseResult(promise, result, resolve, reject) {
     }
 
     const isComplexObject = (typeof result === 'function' || typeof result === 'object') && result !== null;
-    let consumed = false;
+    // let consumed = false;
     if (isComplexObject) {
         try {
             const thenable = result.then;
             if (typeof thenable === 'function') {
-                if (consumed) {
-                    return;
-                }
-                consumed = true;
+                // if (consumed) {
+                //     return;
+                // }
+                // consumed = true;
                 thenable.call(result, (data) => {
                     return resolvePromiseResult(promise, data, resolve, reject);
                 }, (error) => {
-                    if (consumed) {
-                        return;
-                    }
-                    consumed = true;
+                    // if (consumed) {
+                    //     return;
+                    // }
+                    // consumed = true;
                     return reject(error);
                 })
             } else {
                 resolve(result);
             }
         } catch (e) {
-            if (consumed) {
-                return;
-            }
-            consumed = true;
+            // if (consumed) {
+            //     return;
+            // }
+            // consumed = true;
             return reject(e);
         }
 
@@ -142,18 +142,23 @@ function resolvePromiseResult(promise, result, resolve, reject) {
         resolve(result);
     }
 }
-
+MyPromise.prototype.catch = function(catchFunc) {
+    return this.then(null, catchFunc)
+}
 //
-let promise = new MyPromise((resolve, reject) => {
+const promise = new MyPromise((resolve, reject) => {
     setTimeout(() => {
-        resolve('data')
-    }, 2000);
-});
+        resolve('lucas')
+    }, 2000)
+})
 
-promise.then(data => {
-    console.log(`1: ${data}`)
-    return 'haha';
-}).then(data => {
-    console.log(`2: ${data}`);
-});
+
+promise.then(null)
+    .then(data => {
+        console.log(data)
+    })
+
+
+
+
 
