@@ -49,25 +49,62 @@ const MyPromise = function (executor) {
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (data) => data;
     onRejected = typeof onRejected === 'function' ? onRejected : (error) => error;
+
+    let promise = null;
     if (this.status === STATUS.SUCCESS) {
-        onFulfilled(this.value);
+        promise = new MyPromise((resolve, reject) => {
+            setTimeout(() => { // 保持resolve操作在then后边
+                try {
+                    resolve(onFulfilled(this.value));
+                } catch (e) {
+                    reject(e);
+                }
+            })
+
+        });
+        return promise;
     } else if (this.status === STATUS.FAIL) {
-        onRejected(this.error);
+        promise = new MyPromise((resolve, reject) => {
+            setTimeout(() => {
+                try {
+                    resolve(onRejected(this.error));
+                } catch (e) {
+                    reject(e);
+                }
+            })
+
+        });
+        return promise;
     } else if (this.status === STATUS.PENDING) {
-        this.onFulfilledArray.push(onFulfilled);
-        this.onRejectedArray.push(onRejected);
+        promise = new MyPromise((resolve, reject) => {
+            this.onFulfilledArray.push(() => {
+                try {
+                    resolve(onFulfilled(this.value));
+                } catch (e) {
+                    reject(e);
+                }
+            });
+            this.onRejectedArray.push(() => {
+                try {
+                    reject(onRejected(this.error));
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        });
+        return promise;
     }
 };
 
 let promise = new MyPromise((resolve, reject) => {
     setTimeout(() => {
         resolve('data')
-    }, 2000)
-})
+    }, 2000);
+});
 
 promise.then(data => {
     console.log(`1: ${data}`)
-})
-promise.then(data => {
-    console.log(`2: ${data}`)
+    return 'haha';
+}).then(data => {
+    console.log(`2: ${data}`);
 })
