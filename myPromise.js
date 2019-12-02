@@ -10,6 +10,7 @@ const MyPromise = function (executor) {
     this.onRejectedArray = [];
     this.value = '';
     this.error = '';
+
     const resolve = (value) => {
         if (value instanceof MyPromise) {
             return MyPromise.then(resolve, reject)
@@ -49,13 +50,12 @@ const MyPromise = function (executor) {
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (data) => data;
     onRejected = typeof onRejected === 'function' ? onRejected : (error) => error;
-
     let promise = null;
     if (this.status === STATUS.SUCCESS) {
         promise = new MyPromise((resolve, reject) => {
             setTimeout(() => { // 保持resolve操作在then后边
                 try {
-                    resolve(onFulfilled(this.value));
+                    resolvePromiseResult(promise, onFulfilled(this.value), resolve, reject);
                 } catch (e) {
                     reject(e);
                 }
@@ -67,7 +67,7 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
         promise = new MyPromise((resolve, reject) => {
             setTimeout(() => {
                 try {
-                    resolve(onRejected(this.error));
+                    resolvePromiseResult(promise, onRejected(this.error), resolve, reject);
                 } catch (e) {
                     reject(e);
                 }
@@ -77,16 +77,16 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
         return promise;
     } else if (this.status === STATUS.PENDING) {
         promise = new MyPromise((resolve, reject) => {
-            this.onFulfilledArray.push(() => {
+            this.onFulfilledArray.push((value) => {
                 try {
-                    resolve(onFulfilled(this.value));
+                    resolvePromiseResult(promise, onFulfilled(value), resolve, reject);
                 } catch (e) {
                     reject(e);
                 }
             });
-            this.onRejectedArray.push(() => {
+            this.onRejectedArray.push((error) => {
                 try {
-                    reject(onRejected(this.error));
+                    resolvePromiseResult(promise, onRejected(error), resolve, reject);
                 } catch (e) {
                     reject(e);
                 }
@@ -96,6 +96,54 @@ MyPromise.prototype.then = function (onFulfilled, onRejected) {
     }
 };
 
+function resolvePromiseResult(promise, result, resolve, reject) {
+    if (result instanceof MyPromise) {
+        if (result.status === STATUS.PENDING) {
+            result.then((data) => {
+                resolvePromiseResult(promise, data, resolve, reject);
+            }, reject)
+        } else {
+            result.then(resolve, reject);
+        }
+        return;
+    }
+
+    const isComplexObject = (typeof result === 'function' || typeof result === 'object') && result !== null;
+    let consumed = false;
+    if (isComplexObject) {
+        try {
+            const thenable = result.then;
+            if (typeof thenable === 'function') {
+                if (consumed) {
+                    return;
+                }
+                consumed = true;
+                thenable.call(result, (data) => {
+                    return resolvePromiseResult(promise, data, resolve, reject);
+                }, (error) => {
+                    if (consumed) {
+                        return;
+                    }
+                    consumed = true;
+                    return reject(error);
+                })
+            } else {
+                resolve(result);
+            }
+        } catch (e) {
+            if (consumed) {
+                return;
+            }
+            consumed = true;
+            return reject(e);
+        }
+
+    } else {
+        resolve(result);
+    }
+}
+
+//
 let promise = new MyPromise((resolve, reject) => {
     setTimeout(() => {
         resolve('data')
@@ -107,4 +155,5 @@ promise.then(data => {
     return 'haha';
 }).then(data => {
     console.log(`2: ${data}`);
-})
+});
+
