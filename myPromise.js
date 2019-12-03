@@ -15,30 +15,30 @@ const MyPromise = function (executor) {
         if (value instanceof MyPromise) {
             return MyPromise.then(resolve, reject)
         }
-        if (this.status === STATUS.PENDING) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (this.status === STATUS.PENDING) {
                 this.status = STATUS.SUCCESS;
                 this.value = value;
                 this.onFulfilledArray.forEach((func) => {
                     func(this.value);
                 });
-            }, 20)
-        }
+            }
+        }, 20)
     };
 
     const reject = (error) => {
-        if (value instanceof MyPromise) {
+        if (error instanceof MyPromise) {
             return MyPromise.then(resolve, reject)
         }
-        if (this.status === STATUS.PENDING) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (this.status === STATUS.PENDING) {
                 this.status = STATUS.FAIL;
                 this.error = error;
                 this.onRejectedArray.forEach((func) => {
                     func(this.error);
                 });
-            }, 20)
-        }
+            }
+        }, 20)
     };
     try {
         executor(resolve, reject)
@@ -49,7 +49,9 @@ const MyPromise = function (executor) {
 
 MyPromise.prototype.then = function (onFulfilled, onRejected) {
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (data) => data;
-    onRejected = typeof onRejected === 'function' ? onRejected : (error) => error;
+    onRejected = typeof onRejected === 'function' ? onRejected : (error) => {
+        throw error;
+    }
     let promise = null;
     if (this.status === STATUS.SUCCESS) {
         promise = new MyPromise((resolve, reject) => {
@@ -142,21 +144,85 @@ function resolvePromiseResult(promise, result, resolve, reject) {
         resolve(result);
     }
 }
-MyPromise.prototype.catch = function(catchFunc) {
+
+MyPromise.prototype.catch = function (catchFunc) {
     return this.then(null, catchFunc)
+};
+
+MyPromise.resolve = function (value) {
+    return new MyPromise((resolve, reject) => {
+        resolve(value)
+    })
+};
+
+MyPromise.reject = function (value) {
+    return new MyPromise((resolve, reject) => {
+        reject(value)
+    })
+};
+
+MyPromise.all = function (promiseArray) {
+    if (!Array.isArray(promiseArray)) {
+        throw new Error('The arguments should be an array!')
+    }
+    return new MyPromise((resolve, reject) => {
+            try {
+                let resultArray = [];
+
+                const length = promiseArray.length;
+
+                for (let i = 0; i < length; i++) {
+                    promiseArray[i].then(data => {
+                        resultArray.push(data);
+
+                        if (resultArray.length === length) {
+                            resolve(resultArray)
+                        }
+                    }, reject)
+                }
+            } catch (e) {
+                reject(e)
+            }
+        }
+    )
 }
-//
-const promise = new MyPromise((resolve, reject) => {
+
+MyPromise.race = function (promiseArray) {
+    if (!Array.isArray(promiseArray)) {
+        throw new TypeError('The arguments should be an array!')
+    }
+    return new MyPromise((resolve, reject) => {
+        try {
+            const length = promiseArray.length
+            for (let i = 0; i < length; i++) {
+                promiseArray[i].then(resolve, reject)
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+
+const promise1 = new MyPromise((resolve, reject) => {
     setTimeout(() => {
         resolve('lucas')
     }, 2000)
 })
 
+const promise2 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+        resolve('lucas')
+    }, 2000)
+})
 
-promise.then(null)
-    .then(data => {
-        console.log(data)
-    })
+MyPromise.race([promise1, promise2]).then(data => {
+    console.log(data)
+})
+
+
+
+
 
 
 
