@@ -193,7 +193,7 @@ MyPromise.race = function (promiseArray) {
     }
     return new MyPromise((resolve, reject) => {
         try {
-            const length = promiseArray.length
+            const length = promiseArray.length;
             for (let i = 0; i < length; i++) {
                 promiseArray[i].then(resolve, reject)
             }
