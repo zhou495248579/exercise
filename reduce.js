@@ -31,6 +31,7 @@ Object.defineProperty(Array.prototype, 'reduce', {
         return value;
     }
 });
+debugger
 const runPromiseInSequence = function (array, value) {
     array.reduce((promiseItem, callback) => {
         return promiseItem.then(callback)

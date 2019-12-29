@@ -6,3 +6,72 @@
     border: 1px solid #999;
     position: absolute;
 }
+.circleProgress_wrapper{
+    width: 200px;
+    height: 200px;
+    margin: 50px auto;
+    position: relative;
+    border:1px solid #ddd;
+}
+.circleProgress{
+    width: 160px;
+    height: 160px;
+    border:20px solid transparent;
+    border-radius: 50%;
+    position: absolute;
+    top:0;
+    -webkit-transform: rotate(45deg);
+
+}
+.rightcircle{
+    border-top:20px solid green;
+    border-right:20px solid green;
+    right:0;
+    -webkit-animation: circleProgressLoad_right 5s linear infinite;
+
+}
+.leftcircle{
+    border-bottom:20px solid green;
+    border-left:20px solid green;
+    left:0;
+    -webkit-animation: circleProgressLoad_left 5s linear infinite;
+
+}
+.wrapper{
+    width: 100px;
+    height: 200px;
+    position: absolute;
+    top:0;
+    overflow: hidden;
+}
+.right{
+    right:0;
+}
+.left{
+    left:0;
+}
+
+
+/*.content {*/
+/*    width:200px;*/
+/*    height:200px;*/
+/*    background: green;*/
+/*    border-radius: 100px;*/
+/*}*/
+@-webkit-keyframes circleProgressLoad_left{
+    0%,50%{
+        -webkit-transform: rotate(45deg);
+    }
+    100%{
+        -webkit-transform: rotate(225deg);
+    }
+}
+@-webkit-keyframes circleProgressLoad_right{
+    0%{
+        -webkit-transform: rotate(45deg);
+    }
+    50%,100%{
+        -webkit-transform: rotate(225deg);
+    }
+}
+
