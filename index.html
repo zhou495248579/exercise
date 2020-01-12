@@ -15,9 +15,11 @@
     {{person.fav}}
 
     <div v-html = 'html'></div>
-    <input type="text" v-model = 'inputValue'>
+    <input type="text" v-model = 'obj.inputValue'>
+    {{obj.inputValue}}
     <button v-on:click="clickButton">button</button>
 </div>
+<script src="observer.js"></script>
 <script src="my-vue.js"></script>
 <script type="text/javascript">
         var vue = new MyVue({
@@ -25,6 +27,9 @@
             data:{
                 message:'ss',
                 html:'<h1>title</h1>',
+                obj: {
+                    inputValue: ''
+                },
                 inputValue:'s',
                 person: {
                     name:'张三',
@@ -34,7 +39,7 @@
             },
             methods:{
                 clickButton() {
-                    console.log('click' ,this)
+                    this.person.age = Math.random() * 100;
                 }
             }
         })

@@ -4,24 +4,51 @@ const CompileUtil = {
             return data[currentValue];
         }, vm.$data)
     },
+    setValue(expr, vm, inputValue) {
+        return expr.split('.').reduce((data, currentValue, currentIndex, array) => {
+            if (currentIndex === array.length - 1) {
+                data[currentValue] = inputValue;
+            }
+            return data[currentValue];
+        }, vm.$data)
+    },
+    getTextContentValue(expr, vm) {
+        return expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
+            return this.getValue(args[1], vm);
+        })
+    },
     text(node, expr, vm) {
-        if(expr.includes('{{')){
-           expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
-               this.updater.textUpdate(node, this.getValue(args[1], vm));
-           })
+        let value = null;
+        if (expr.includes('{{')) {
+            value = expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
+                new Watcher(vm, args[1], (newValue) => {
+                    this.updater.textUpdate(node, this.getTextContentValue(expr, vm));
+                });
+                return this.getValue(args[1], vm);
+            })
         } else {
-            this.updater.textUpdate(node, this.getValue(expr, vm));
+            value = this.getValue(expr, vm);
         }
+        this.updater.textUpdate(node, value);
     },
     html(node, expr, vm) {
+        new Watcher(vm, expr, (newValue) => {
+            this.updater.htmlUpdate(node, newValue);
+        });
         this.updater.htmlUpdate(node, this.getValue(expr, vm))
     },
     model(node, expr, vm) {
+        node.addEventListener('input', (e) => {
+            this.setValue(expr, vm, e.target.value);
+        }, false);
+        new Watcher(vm, expr, (newValue) => {
+            this.updater.modelUpdate(node, newValue);
+        });
         this.updater.modelUpdate(node, this.getValue(expr, vm))
     },
     on(node, expr, vm, event) {
         const fn = vm.$options.methods && vm.$options.methods[expr];
-        node.addEventListener(event,fn.bind(vm), false )
+        node.addEventListener(event, fn.bind(vm), false)
     },
     updater: {
         textUpdate(node, value) {
@@ -94,7 +121,7 @@ class Compile {
     }
 
     compileText(node) {
-        if (node.textContent.includes('{{' )) {
+        if (node.textContent.includes('{{')) {
             CompileUtil['text'](node, node.textContent, this.vm)
         }
     }
@@ -110,7 +137,22 @@ class MyVue {
         this.$data = option.data;
         this.$options = option;
         if (this.$el) {
+            new Observer(this.$data);
             new Compile(this.$el, this);
+            this.proxyData(this.$data);
+        }
+    }
+
+    proxyData(data) {
+        for (let key of Object.keys(data)) {
+            Object.defineProperty(this, key, {
+                configurable: false,
+                get() {
+                    return this.$data[key];
+                }, set(v) {
+                    this.$data[key] = v;
+                }
+            })
         }
     }
 }
