@@ -5,6 +5,39 @@
     <title>cstgg</title>
 </head>
 <body>
+<div id="box">
+    {{person.name}}-{{person.age}}
+    <div>
+      <span v-text = 'message'>
+        {{message}}
+    </span>
+    </div>
+    {{person.fav}}
 
+    <div v-html = 'html'></div>
+    <input type="text" v-model = 'inputValue'>
+    <button v-on:click="clickButton">button</button>
+</div>
+<script src="my-vue.js"></script>
+<script type="text/javascript">
+        var vue = new MyVue({
+            el:'#box',
+            data:{
+                message:'ss',
+                html:'<h1>title</h1>',
+                inputValue:'s',
+                person: {
+                    name:'张三',
+                    age:18,
+                    fav: '女人'
+                }
+            },
+            methods:{
+                clickButton() {
+                    console.log('click' ,this)
+                }
+            }
+        })
+</script>
 </body>
 </html>
