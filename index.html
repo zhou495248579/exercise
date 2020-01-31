@@ -6,43 +6,17 @@
 </head>
 <body>
 <div id="box">
-    {{person.name}}-{{person.age}}
-    <div>
-      <span v-text = 'message'>
-        {{message}}
-    </span>
-    </div>
-    {{person.fav}}
 
-    <div v-html = 'html'></div>
-    <input type="text" v-model = 'obj.inputValue'>
-    {{obj.inputValue}}
-    <button v-on:click="clickButton">button</button>
 </div>
-<script src="observer.js"></script>
-<script src="my-vue.js"></script>
+<script src="react-mock/Element.js"></script>
 <script type="text/javascript">
-        var vue = new MyVue({
-            el:'#box',
-            data:{
-                message:'ss',
-                html:'<h1>title</h1>',
-                obj: {
-                    inputValue: ''
-                },
-                inputValue:'s',
-                person: {
-                    name:'张三',
-                    age:18,
-                    fav: '女人'
-                }
-            },
-            methods:{
-                clickButton() {
-                    this.person.age = Math.random() * 100;
-                }
-            }
-        })
+    const list = new Element('ul', {class:'list'}, [
+        new Element('li', {}, ['li1']),
+        new Element('li', {}, ['li2']),
+    ]).render()
+    const box = document.getElementById('box');
+    box.appendChild(list);
+    console.log(list)
 </script>
 </body>
 </html>
