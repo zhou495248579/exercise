@@ -2,21 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>cstgg</title>
+    <title>exercise</title>
 </head>
 <body>
-<div id="box">
-
-</div>
+<button id="btn">change</button>
 <script src="react-mock/Element.js"></script>
 <script type="text/javascript">
-    const list = new Element('ul', {class:'list'}, [
-        new Element('li', {}, ['li1']),
-        new Element('li', {}, ['li2']),
-    ]).render()
-    const box = document.getElementById('box');
-    box.appendChild(list);
-    console.log(list)
+    const fruitVirtualDom = element('ul', {id: 'list'}, [
+        element('li', {class: 'fruit'}, ['苹果']),
+        element('li', {class: 'fruit'}, ['橘子']),
+        element('li', {class: 'fruit'}, ['葡萄'])
+    ]);
+    const ele = fruitVirtualDom.render();
+
+    renderDom(ele, document.body)
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+
+        const fruitVirtualDom1 = element('ul', {id: 'list'}, [
+            element('li', {class: 'fruit'}, ['apple']),
+            element('li', {class: 'fruit'}, ['orange']),
+            element('li', {class: 'fruit', style: "color:red"}, ['grape'])
+        ]);
+        const patches = diff(fruitVirtualDom1, fruitVirtualDom)
+        patch(ele, patches)
+    }, false)
 </script>
 </body>
 </html>
