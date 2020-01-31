@@ -2,21 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>cstgg</title>
+    <title>exercise</title>
 </head>
 <body>
 <div id="box">
-
+<button id="btn">change</button>
 </div>
 <script src="react-mock/Element.js"></script>
 <script type="text/javascript">
-    const list = new Element('ul', {class:'list'}, [
-        new Element('li', {}, ['li1']),
-        new Element('li', {}, ['li2']),
-    ]).render()
-    const box = document.getElementById('box');
-    box.appendChild(list);
-    console.log(list)
+    const chapterListVirtualDom = element('ul', { id: 'list' }, [
+        element('li', { class: 'chapter' }, ['chapter1']),
+        element('li', { class: 'chapter' }, ['chapter2']),
+        element('li', { class: 'chapter' }, ['chapter3'])
+    ])
+
+
+
+    var ele = chapterListVirtualDom.render()
+    renderDom(ele, document.body)
+
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', () => {
+
+        const chapterListVirtualDom1 = element('ul', { id: 'list2' }, [
+            element('li', { class: 'chapter2' }, ['chapter4']),
+            element('li', { class: 'chapter' }, ['chapter2']),
+            element('li', { class: 'chapter' }, ['chapter3'])
+        ])
+        const patches = diff(chapterListVirtualDom, chapterListVirtualDom1)
+        patch(ele, patches)
+    }, false)
 </script>
 </body>
 </html>
