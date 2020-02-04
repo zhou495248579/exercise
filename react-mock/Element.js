@@ -1,3 +1,98 @@
+class Element {
+    constructor(tagName, attributes = {}, children = []) {
+        this.tagName = tagName;
+        this.attributes = attributes;
+        this.children = children;
+    }
+
+    render() {
+        const ele = document.createElement(this.tagName);
+        if (this.children && this.children.length > 0) {
+            this.children.forEach((childElement) => {
+                if (childElement instanceof Element) {
+                    ele.appendChild(childElement.render());
+                } else if (typeof childElement === 'string') {
+                    ele.appendChild(document.createTextNode(childElement));
+                }
+            })
+        }
+        return ele;
+    }
+}
+
+const element = (tagName, attributes, children) => {
+    return new Element(tagName, attributes, children);
+};
+
+const renderDom = (ele, dom) => {
+    dom.appendChild(ele);
+};
+
+const NODE_OPERATOR_TYPE = {
+    REMOVE_NODE: 'removeNode',
+    MODIFY_TEXT: 'modifyText',
+    MODIFY_ATTRIBUTE: 'modifyAttribute',
+    REPLACE_NODE: 'replaceNode'
+};
+let initialIndex = 0;
+
+const compareDiff = (newVirtualDom, oldVirtualDom, index, patch) => {
+    const diffresult = [];
+    if (!newVirtualDom) {
+        diffresult.push({
+            type: NODE_OPERATOR_TYPE.REMOVE_NODE,
+        })
+    } else if (typeof newVirtualDom === 'string' && typeof oldVirtualDom === 'string') {
+        if (oldVirtualDom !== newVirtualDom) {
+            diffresult.push({
+                type: NODE_OPERATOR_TYPE.MODIFY_TEXT,
+                data: newVirtualDom
+            })
+        }
+    } else if (newVirtualDom.tagName === oldVirtualDom.tagName) {
+        const diffAttributeResult = {};
+        // 先遍历老dom找出变化的属性值， 再遍历新dom找出新添加的属性
+        for (const key in oldVirtualDom) {
+            if (oldVirtualDom[key] !== newVirtualDom[key]) {
+                diffAttributeResult[key] = newVirtualDom[key];
+            }
+        }
+
+        for (const key in newVirtualDom) {
+            if (!oldVirtualDom.hasOwnProperty(key)) {
+                diffAttributeResult[key] = newVirtualDom[key];
+            }
+        }
+        if (Object.keys(diffAttributeResult).length > 0) {
+            diffresult.push({
+                type: NODE_OPERATOR_TYPE.MODIFY_ATTRIBUTE,
+                diffAttributeResult
+            })
+        }
+        // 在节点相同情况下遍历子节点进行比较
+        oldVirtualDom.children.forEach((childEle, index) => {
+            compareDiff(newVirtualDom.children[index], childEle, ++initialIndex, patch)
+        })
+    } else {
+        diffresult.push({
+            type: NODE_OPERATOR_TYPE.REPLACE_NODE,
+            newVirtualDom
+        })
+    }
+    if (diffresult.length > 0) {
+        patch[index] = diffresult;
+    }
+};
+
+
+const diff = (newVirtualDom, oldVirtualDom) => {
+    let patches = {}
+
+    // 递归树 比较后的结果放到 patches
+    compareDiff(newVirtualDom, oldVirtualDom, 0, patches)
+
+    return patches
+}
 const setAttribute = (node, key, value) => {
     switch (key) {
         case 'style':
@@ -20,147 +115,58 @@ const setAttribute = (node, key, value) => {
             break
     }
 }
-const renderDom = (element, target) => {
-    target.appendChild(element)
-}
-const NODE_OPERATOR_TYPE = {
-    REMOVE: 'remove',
-    MODIFY_TEXT: 'modifyText',
-    MODIFY_ATTRIBUTE: 'MODIFY_ATTRIBUTES',
-    REPLACE_NODE: 'REPLACE'
-}
 
 
-class Element {
-    constructor(tagName, attributes = {}, children = []) {
-        this.tagName = tagName;
-        this.attributes = attributes;
-        this.children = children;
-    }
-
-    render() {
-        let ele = document.createElement(this.tagName);
-        for (let key in this.attributes) {
-            setAttribute(ele, key, this.attributes[key]);
-        }
-        this.children.forEach((childElement) => {
-            if (childElement instanceof Element) {
-                ele.appendChild(childElement.render());
-            } else if (typeof childElement === 'string') {
-                ele.appendChild(document.createTextNode(childElement));
-            }
-        });
-        return ele;
-    }
-
-}
-
-function element(tagName, attributes, children) {
-    return new Element(tagName, attributes, children)
-}
-
-const diff = (oldVirtualDom, newVirtualDom) => {
-    let patches = {};
-
-    // 递归树，比较后的结果放到 patches
-    walkToDiff(oldVirtualDom, newVirtualDom, 0, patches)
-
-    // 返回 diff 结果
-    return patches
-};
-const patch = (node, patches) => {
-    let walker = {index: 0};
-    walk(node, walker, patches);
-}
-
-function doPatch(node, patches) {
-    patches.forEach((patch) => {
-        switch (patch.type) {
-            case NODE_OPERATOR_TYPE.REMOVE:
-                node.parentNode.removeChild(node);
+function doPatch(node, diffResult) {
+    diffResult.forEach((diff) => {
+        switch (diff.type) {
+            case NODE_OPERATOR_TYPE.REPLACE_NODE:
+                const newVirtualDom = diff.newVirtualDom;
+                let newNode = null;
+                if (newVirtualDom instanceof Element) {
+                    newNode = newVirtualDom.render();
+                } else if (typeof newVirtualDom === 'string') {
+                    newNode = document.createTextNode(newVirtualDom);
+                }
+                node.parentNode.replaceChild(newNode, node);
                 break;
             case NODE_OPERATOR_TYPE.MODIFY_ATTRIBUTE:
-                const attributes = patch.diffAttributeResult.attributes;
-                for (let key in attributes) {
+                const diffAttributeResult = diff.diffAttributeResult;
+                const attributes = diffAttributeResult.attributes;
+                for (const attr in attributes) {
                     if (node.nodeType === 1) {
-                        if (attributes[key]) {
-                            setAttribute(node, key, attributes[key]);
+                        if (attributes[attr]) {
+                            setAttribute(node, attr, attributes[attr]);
                         } else {
-                            node.removeAttribute(key);
+                            node.removeAttribute(attr);
                         }
                     }
                 }
                 break;
             case NODE_OPERATOR_TYPE.MODIFY_TEXT:
-                node.textContent = patch.data;
+                node.textContent = diff.data;
                 break;
-            case NODE_OPERATOR_TYPE.REPLACE_NODE:
-                const newNode = (patch.newNode instanceof Element) ? patch.newNode.render() : document.createTextNode(patch.newNode);
-                node.parentNode.replaceChild(newNode, node);
+            case NODE_OPERATOR_TYPE.REMOVE_NODE:
+                node.parentNode.removeChild(node);
+                break;
+            default:
                 break;
         }
     })
 }
 
-const walk = (node, walker, patches) => {
-    let currentPatch = patches[walker.index];
-    let childNodes = node.childNodes;
-    for (let node of childNodes) {
+function walk(node, walker, patches) {
+    const currentPatch = patches[walker.index];
+    node.childNodes.forEach((node, index) => {
         walker.index++;
-        walk(node, walker, patches)
-    }
+        walk(node, walker, patches);
+    })
     if (currentPatch) {
         doPatch(node, currentPatch);
     }
 }
 
-
-let initialIndex = 0;
-const walkToDiff = (oldVirtualDom, newVirtualDom, index, patches) => {
-    let diffResult = [];
-    if (!newVirtualDom) {
-        diffResult.push({
-            type: NODE_OPERATOR_TYPE.REMOVE,
-            index
-        })
-    } else if (typeof oldVirtualDom === 'string' && typeof oldVirtualDom === typeof newVirtualDom) {
-        if (oldVirtualDom !== newVirtualDom) {
-            diffResult.push({
-                type: NODE_OPERATOR_TYPE.MODIFY_TEXT,
-                data: newVirtualDom,
-                index
-            })
-        }
-    } else if (typeof newVirtualDom.tagName === typeof oldVirtualDom.tagName) {
-        let diffAttributeResult = {};
-        for (let key in oldVirtualDom) {
-            if (oldVirtualDom[key] !== newVirtualDom[key]) {
-                diffAttributeResult[key] = newVirtualDom[key]
-            }
-        }
-        for (let key in newVirtualDom) {
-            // 旧节点不存在的新属性
-            if (!oldVirtualDom.hasOwnProperty(key)) {
-                diffAttributeResult[key] = newVirtualDom[key]
-            }
-        }
-
-        if (Object.keys(diffAttributeResult).length > 0) {
-            diffResult.push({
-                type: NODE_OPERATOR_TYPE.MODIFY_ATTRIBUTE,
-                diffAttributeResult
-            })
-        }
-        oldVirtualDom.children.forEach((child, index) => {
-            walkToDiff(child, newVirtualDom.children[index], ++initialIndex, patches)
-        })
-    } else {
-        diffResult.push({
-            type: NODE_OPERATOR_TYPE.REPLACE_NODE,
-            newVirtualDom
-        })
-    }
-    if (diffResult.length) {
-        patches[index] = diffResult
-    }
-};
+const patch = (node, patches) => {
+    const walker = {index: 0};
+    walk(node, walker, patches);
+}

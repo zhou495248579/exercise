@@ -5,31 +5,26 @@
     <title>exercise</title>
 </head>
 <body>
-<div id="box">
 <button id="btn">change</button>
-</div>
 <script src="react-mock/Element.js"></script>
 <script type="text/javascript">
-    const chapterListVirtualDom = element('ul', { id: 'list' }, [
-        element('li', { class: 'chapter' }, ['chapter1']),
-        element('li', { class: 'chapter' }, ['chapter2']),
-        element('li', { class: 'chapter' }, ['chapter3'])
-    ])
+    const fruitVirtualDom = element('ul', {id: 'list'}, [
+        element('li', {class: 'fruit'}, ['苹果']),
+        element('li', {class: 'fruit'}, ['橘子']),
+        element('li', {class: 'fruit'}, ['葡萄'])
+    ]);
+    const ele = fruitVirtualDom.render();
 
-
-
-    var ele = chapterListVirtualDom.render()
     renderDom(ele, document.body)
-
     const btn = document.getElementById('btn');
     btn.addEventListener('click', () => {
 
-        const chapterListVirtualDom1 = element('ul', { id: 'list2' }, [
-            element('li', { class: 'chapter2' }, ['chapter4']),
-            element('li', { class: 'chapter' }, ['chapter2']),
-            element('li', { class: 'chapter' }, ['chapter3'])
-        ])
-        const patches = diff(chapterListVirtualDom, chapterListVirtualDom1)
+        const fruitVirtualDom1 = element('ul', {id: 'list'}, [
+            element('li', {class: 'fruit'}, ['apple']),
+            element('li', {class: 'fruit'}, ['orange']),
+            element('li', {class: 'fruit', style: "color:red"}, ['grape'])
+        ]);
+        const patches = diff(fruitVirtualDom1, fruitVirtualDom)
         patch(ele, patches)
     }, false)
 </script>
