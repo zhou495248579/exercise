@@ -3,7 +3,6 @@ const path = require('path'), HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: {
         app: [
-            'webpack-dev-server/client?http://localhost:8080/',
             './src/index.js',
         ],
     },
@@ -32,7 +31,6 @@ module.exports = {
 
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
-        compress: true,
         port: 8081,
         hot: true,
         liveReload: true

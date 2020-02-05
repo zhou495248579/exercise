@@ -26,7 +26,7 @@ export class Compile {
         fragment.childNodes.forEach((childNode) => {
             if (childNode && childNode.nodeType === 1) {
                 this.compileElement(childNode)
-            } else if (typeof childNode === 'string') {
+            } else {
                 this.compileText(childNode)
             }
             if (childNode && childNode.childNodes.length > 0) {
@@ -40,19 +40,21 @@ export class Compile {
         attributes.forEach((attribute) => {
             const {name, value} = attribute;
             if (this.isDirective(name)) {
-                const [,directive] = name.split('-');
+                const [, directive] = name.split('-');
                 const [directiveName, eventName] = directive.split(':');
-                CompileUtil[directiveName](node, directiveName, this.vm);
+                CompileUtil[directiveName](node, value, this.vm);
             }
         })
     }
 
     compileText(node) {
-
+        if (node.textContent && node.textContent.includes('{{')) {
+            CompileUtil['text'](node, node.textContent, this.vm)
+        }
     }
 
     isDirective(name) {
-        if(typeof name !== 'string') {
+        if (typeof name !== 'string') {
             return false;
         }
         return name.startsWith('v-');

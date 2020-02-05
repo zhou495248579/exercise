@@ -2,10 +2,16 @@ import html from './index.html'
 import styles from './styles/index.less';
 import Vue from './mock-vue/vue';
 
-
-const vue = new Vue(
+var vue = new Vue(
     '#box',
     {
-        text:'文本'
+        text: {
+            value: '文本'
+        }
     }
 )
+
+const input = document.getElementById('input');
+input.addEventListener('input', (e) => {
+    vue.$data.text.value = e.target.value;
+})
