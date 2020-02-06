@@ -7,6 +7,13 @@ var vue = new Vue(
     {
         text: {
             value: '文本'
+        },
+        html: '<h1>html</h1>',
+        inputValue: 'input'
+    },
+    {
+        clickButton() {
+            alert(this.$data.text.value);
         }
     }
 )
@@ -14,4 +21,9 @@ var vue = new Vue(
 const input = document.getElementById('input');
 input.addEventListener('input', (e) => {
     vue.$data.text.value = e.target.value;
+})
+
+const htmlBtn = document.getElementById('changeHtmlBtn');
+htmlBtn.addEventListener('click', (e) => {
+    vue.$data.html = '<h2>changeHtml</h2>'
 })

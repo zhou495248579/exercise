@@ -42,7 +42,7 @@ export class Compile {
             if (this.isDirective(name)) {
                 const [, directive] = name.split('-');
                 const [directiveName, eventName] = directive.split(':');
-                CompileUtil[directiveName](node, value, this.vm);
+                CompileUtil[directiveName](node, value, this.vm, eventName);
             }
         })
     }

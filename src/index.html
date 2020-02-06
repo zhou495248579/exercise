@@ -6,10 +6,17 @@
 </head>
 <body>
 <input type="text" id="input">
+<button id="changeHtmlBtn">修改html</button>
 <div id="box" >
+    <div v-html="html">
+        html
+    </div>
     <p v-text="text.value">
     </p>
     {{text.value}}
+    <input type="text" v-modal = 'inputValue'>
+    <div>{{inputValue}}</div>
+    <button v-on:click="clickButton">绑定</button>
 </div>
 </body>
 </html>
