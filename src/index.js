@@ -18,12 +18,12 @@ var vue = new Vue(
     }
 )
 
-const input = document.getElementById('input');
-input.addEventListener('input', (e) => {
-    vue.$data.text.value = e.target.value;
-})
+// const input = document.getElementById('input');
+// input.addEventListener('input', (e) => {
+//     vue.$data.text.value = e.target.value;
+// })
 
-const htmlBtn = document.getElementById('changeHtmlBtn');
-htmlBtn.addEventListener('click', (e) => {
-    vue.$data.html = '<h2>changeHtml</h2>'
-})
+// const htmlBtn = document.getElementById('changeHtmlBtn');
+// htmlBtn.addEventListener('click', (e) => {
+//     vue.$data.html = '<h2>changeHtml</h2>'
+// })

@@ -31,12 +31,11 @@ export class Watch {
             this.callBack(newValue);
             this.oldValue = newValue;
         }
-
     }
 
     getOldValue() {
         Dep.target = this; // 用这种方式就不能Dep类与Watch类分在两个文件，webpack打包target值会丢掉
-        const oldValue = CompileUtil.getValue(this.expr, this.vm);
+        const oldValue = CompileUtil.getValue(this.expr, this.vm); // 获取data中的值，在get中添加Watch入Dep
         Dep.target = null;
         return oldValue;
     }

@@ -11,6 +11,4 @@ export default class Vue {
             new Compile(this.$el, this);
         }
     }
-
-
 }
