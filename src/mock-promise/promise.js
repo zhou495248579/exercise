@@ -88,6 +88,7 @@ export default class Promise {
             }
         }
     }
+
     /**
      * 每个判断分支中都返回一个promise
      */
@@ -140,5 +141,62 @@ export default class Promise {
         }
     }
 
+    catch(handleError) {
+        this.then(null, handleError);
+    }
 
+    static resolve(value) {
+        return new Promise((resolve, reject) => {
+            resolve(value);
+        })
+    }
+
+    static reject(value) {
+        return new Promise((resolve, reject) => {
+            reject(value);
+        })
+    }
+
+    /**
+     *
+     * @param promiseArray
+     * @return {Promise}
+     * 要注意catch 错误的位置
+     */
+    static all(promiseArray) {
+        const result = [];
+        return new Promise((resolve, reject) => {
+            try {
+                promiseArray.forEach((promise, index) => {
+                    promiseArray[index].then((data) => {
+                        result.push(data);
+                        if (index === promiseArray.length - 1) {
+                            resolve(result);
+                        }
+
+                    }, (error) => {
+                        reject(error);
+                    })
+                })
+            } catch (e) {
+                reject(e);
+            }
+        })
+    }
+
+    static race(promiseArray) {
+        return new Promise((resolve, reject) => {
+            try {
+                promiseArray.forEach((promise, index) => {
+                    promiseArray[index].then((data) => {
+                        resolve(data)
+                    }, (error) => {
+                        reject(error);
+                    })
+                })
+            } catch (e) {
+                reject(e);
+            }
+        })
+    }
 }

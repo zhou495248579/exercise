@@ -2,19 +2,20 @@ import html from './index.html'
 import styles from './styles/index.less';
 import Promise from "./mock-promise/promise";
 
-const p = new Promise((resolve, rejected) => {
-    resolve('hello');
+const p1 = new Promise((resolve, rejected) => {
+    resolve('p1');
 });
-p.then((data) => {
-    // console.log(data);
-    // return data
-    return new Promise((resolve, reject) => {
-        resolve(data + '1');
-    })
-}, (error) => {
-    console.error(error);
-}).then((data) => {
-    console.log(data)
-}, (error) => {
-    console.error(error)
+
+const p2 = new Promise((resolve, rejected) => {
+    resolve('p2');
+});
+
+const p3 = new Promise((resolve, rejected) => {
+    resolve('p3');
+});
+// Promise.reject('邹正你妈死了').catch((error) => {
+//     console.error(error)
+// })
+Promise.race([p1, p2, p3]).then((result) => {
+    console.log(result)
 })
