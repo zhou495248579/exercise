@@ -1,29 +1,20 @@
 import html from './index.html'
 import styles from './styles/index.less';
-import Vue from './mock-vue/vue';
+import Promise from "./mock-promise/promise";
 
-var vue = new Vue(
-    '#box',
-    {
-        text: {
-            value: '文本'
-        },
-        html: '<h1>html</h1>',
-        inputValue: 'input'
-    },
-    {
-        clickButton() {
-            alert(this.$data.text.value);
-        }
-    }
-)
-
-// const input = document.getElementById('input');
-// input.addEventListener('input', (e) => {
-//     vue.$data.text.value = e.target.value;
-// })
-
-// const htmlBtn = document.getElementById('changeHtmlBtn');
-// htmlBtn.addEventListener('click', (e) => {
-//     vue.$data.html = '<h2>changeHtml</h2>'
-// })
+const p = new Promise((resolve, rejected) => {
+    resolve('hello');
+});
+p.then((data) => {
+    // console.log(data);
+    // return data
+    return new Promise((resolve, reject) => {
+        resolve(data + '1');
+    })
+}, (error) => {
+    console.error(error);
+}).then((data) => {
+    console.log(data)
+}, (error) => {
+    console.error(error)
+})
