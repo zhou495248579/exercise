@@ -79,7 +79,6 @@ export default class Promise {
                         })
                     }
                 })
-
             };
             try {
                 executor(resolveFunction, rejectFunction);
@@ -165,6 +164,7 @@ export default class Promise {
      */
     static all(promiseArray) {
         const result = [];
+        // 外围promise包裹，返回这个promise
         return new Promise((resolve, reject) => {
             try {
                 promiseArray.forEach((promise, index) => {
