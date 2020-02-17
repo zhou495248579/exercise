@@ -3,8 +3,11 @@ const path = require('path'), HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: {
         app: [
-            './src/index.js',
+            './src/index.ts',
         ],
+    },
+    resolve: {
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
     },
     module: {
         rules: [
@@ -26,16 +29,10 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.tsx?$/, loader: "ts-loader", include: path.join(__dirname, "src"),
+            }
         ],
-    },
-
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        port: 8081,
-        hot: true,
-        liveReload: true
-
-
     },
     output: {
         filename: 'main.js',
