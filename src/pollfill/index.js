@@ -1,14 +1,17 @@
-Function.prototype.mockApply = function (target, args) {
-    const obj = new Object(target);
-    const key = Symbol.for('key');
-    obj[key] = this; // 因为在Function.prototype上，隐式绑定
-    const result = obj[key](...args)
-    delete obj[key];
+Function.prototype.mockbind = function (target, ...args) {
+    const self = this;
+    return function (...param) {
+        const newParam = [...args, ...param]
+        self.apply(target, newParam);
+    }
 };
 
-Function.prototype.mockBind = function (target, args) {
+Function.prototype.mockApply = function (target, args) {
     const self = this;
-    return function (param) {
-        return this.apply(target, [args.concat(param)]);
-    }
+    const obj = new Object(target);
+    const key = Symbol.for('key');
+    obj[key] = self;
+    const result = obj[key](...args);
+    delete obj[key];
+    return result;
 };
