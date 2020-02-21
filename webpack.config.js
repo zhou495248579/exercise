@@ -1,6 +1,8 @@
 const path = require('path'), HtmlWebpackPlugin = require('html-webpack-plugin');
 
+
 module.exports = {
+    mode: "development",
     entry: {
         app: [
             './src/index.js',
@@ -11,6 +13,12 @@ module.exports = {
             {
                 test: /\.html$/i,
                 loader: 'html-loader',
+            },
+            {
+                test:/\.jpg$/i,
+                loader:'url-loader',
+                options: {
+                }
             },
             {
                 test: /\.less$/,
