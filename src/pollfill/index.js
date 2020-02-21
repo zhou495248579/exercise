@@ -1,3 +1,5 @@
+import '../styles/index.less';
+
 Function.prototype.mockbind = function (target, ...args) {
     const self = this;
     return function (...param) {
@@ -14,4 +16,6 @@ Function.prototype.mockApply = function (target, args) {
     const result = obj[key](...args);
     delete obj[key];
     return result;
-};
+}
+
+
