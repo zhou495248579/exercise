@@ -1,9 +1,12 @@
 import html from './index.html'
 import styles from './styles/index.less';
-import Vue from './mock-vue/vue';
+// import styles from './styles/styles.css';
 import yonerImg from './images/yonger.jpg'
-const box = document.getElementById('box');
+import createImg from "./createImg";
 
+createImg();
+const box = document.getElementById('box');
 var img = document.createElement('img');
+img.classList.add(styles.yonger);
 img.src = yonerImg;
 box.appendChild(img);
