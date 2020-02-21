@@ -15,6 +15,11 @@ module.exports = {
                 loader: 'html-loader',
             },
             {
+                test: /\.(eot|svg|ttf|woff|woff2)$/i,
+                loader: 'file-loader',
+                options: {}
+            },
+            {
                 test: /\.jpg$/i,
                 loader: 'url-loader',
                 options: {}
@@ -27,12 +32,12 @@ module.exports = {
                     },
                     {
                         loader: 'css-loader', // translates CSS into CommonJS
-                        options: {
-                            importLoaders: 2,
-                            modules: {
-                                localIdentName: '[local]--[hash:base64:5]'
-                            }
-                        }
+                        // options: {
+                        //     importLoaders: 2,
+                        //     modules: {
+                        //         localIdentName: '[local]--[hash:base64:5]'
+                        //     }
+                        // }
                     },
                     {
                         loader: "postcss-loader"
