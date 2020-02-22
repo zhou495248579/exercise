@@ -11,7 +11,31 @@ const devConfig = {
         open: true
     },
     optimization: {
-        usedExports: true
+        usedExports: true,
+        splitChunks: {
+            chunks: 'all',
+            minSize: 30000,
+            maxSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 6,
+            maxInitialRequests: 4,
+            automaticNameDelimiter: '~',
+            automaticNameMaxLength: 30,
+            name:true,
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+
+                }
+            }
+        }
     }
 };
 
