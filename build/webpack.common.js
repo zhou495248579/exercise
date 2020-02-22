@@ -3,8 +3,6 @@ const path = require('path'),
 
 
 module.exports = {
-    mode: "development",
-    devtool: 'source-map',
     entry: {
         app: [
             './src/index.js',
@@ -58,17 +56,9 @@ module.exports = {
             }
         ],
     },
-
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        port: 8081,
-        open: true,
-        hot: true,
-        hotOnly: true
-    },
     output: {
         filename: 'main.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
     },
     plugins: [new HtmlWebpackPlugin({
         template: './src/index.html'
