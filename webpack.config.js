@@ -12,6 +12,7 @@ module.exports = {
     },
     module: {
         rules: [
+            {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
             {
                 test: /\.html$/i,
                 loader: 'html-loader',
@@ -61,7 +62,9 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         port: 8081,
-        open:true
+        open: true,
+        hot: true,
+        hotOnly: true
     },
     output: {
         filename: 'main.js',
