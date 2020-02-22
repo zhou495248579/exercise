@@ -10,3 +10,5 @@ var img = document.createElement('img');
 img.classList.add(styles.yonger);
 img.src = yonerImg;
 box.appendChild(img);
+console.log('sd')
+console.log('sd')

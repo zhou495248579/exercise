@@ -1,8 +1,10 @@
-const path = require('path'), HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path'),
+    HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
 module.exports = {
     mode: "development",
+    devtool: 'source-map',
     entry: {
         app: [
             './src/index.js',
@@ -59,10 +61,7 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         port: 8081,
-        hot: true,
-        liveReload: true
-
-
+        open:true
     },
     output: {
         filename: 'main.js',
