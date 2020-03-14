@@ -51,3 +51,17 @@ export const throttle = function (func, wait) {
 
     }
 };
+
+export const mockInstanceOf = function (l, r) {
+    if(typeof l !== 'object') {
+        return false;
+    }
+
+    while(l) {
+       if( l.__proto__ === r.prototype) {
+           return true;
+       }
+       l=l.__proto__;
+    }
+    return  false;
+};
