@@ -2,15 +2,16 @@ import html from './index.html'
 import styles from './styles/index.less';
 
 import './pollfill/index'
-import {mockInstanceOf} from "./pollfill";
+import {get, mockInstanceOf} from "./pollfill";
 
-const result = mockInstanceOf(3, Array);
 const obj = {
-    valueOf: function() {
-      return 2
-    },
-    toString:function () {
-        return 1;
+    user: {
+        posts: [
+            { title: 'Foo', comments: [ 'Good one!', 'Interesting...' ] },
+            { title: 'Bar', comments: [ 'Ok' ] },
+            { title: 'Baz', comments: []}
+        ],
+        comments: ['sd']
     }
-};
-console.log(obj + true);
+}
+console.log(get(['user', 'posts', 0, 'comments'], obj)) // [ 'Good one!', 'Interesting...' ]
