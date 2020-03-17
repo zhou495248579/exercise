@@ -2,16 +2,20 @@ import html from './index.html'
 import styles from './styles/index.less';
 
 import './pollfill/index'
-import {get, mockInstanceOf} from "./pollfill";
 
-const obj = {
-    user: {
-        posts: [
-            { title: 'Foo', comments: [ 'Good one!', 'Interesting...' ] },
-            { title: 'Bar', comments: [ 'Ok' ] },
-            { title: 'Baz', comments: []}
-        ],
-        comments: ['sd']
-    }
+const person = {
+    name: 'lilei'
+};
+
+
+function createAnotherPerson(person) {
+    const anotherPerson = Object.create(person);
+    anotherPerson.name = 'tom';
+    anotherPerson.sayName = function () {
+        console.log(this.name)
+    };
+    return anotherPerson;
 }
-console.log(get(['user', 'posts', 0, 'comments'], obj)) // [ 'Good one!', 'Interesting...' ]
+
+const anotherPerson = createAnotherPerson(person);
+anotherPerson.sayName()
