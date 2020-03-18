@@ -71,3 +71,12 @@ export const get = function (params, obj) {
         return (accum && accum[attr]) ? accum[attr] : null;
     }, obj);
 };
+
+export function DateConstructor() {
+    // Date对象在js中只能通过Date函数用构造函数的方式实例化
+    const date = new (Function.prototype.bind.apply(Date,
+        [Date].concat(Array.prototype.slice.call(arguments))))();
+    // Object.setPrototypeOf(date,DateConstructor.prototype);
+    return date;
+}
+Object.setPrototypeOf(DateConstructor.prototype, Date.prototype);
