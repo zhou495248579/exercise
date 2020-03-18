@@ -1,7 +1,9 @@
 const path = require('path'), HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: {
+    mode: "development",
+    devtool: 'source-map',
+entry: {
         app: [
             './src/index.js',
         ],
@@ -26,6 +28,9 @@ module.exports = {
                     },
                 ],
             },
+            {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"}
+
+
         ],
     },
 

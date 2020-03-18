@@ -21,6 +21,7 @@ export default class Observer {
             enumerable: true,
             get: () => {
                 Dep.target && dep.add(Dep.target)
+
                 return value;
             },
             set: (v) => {
