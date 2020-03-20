@@ -79,4 +79,12 @@ export function DateConstructor() {
     // Object.setPrototypeOf(date,DateConstructor.prototype);
     return date;
 }
-Object.setPrototypeOf(DateConstructor.prototype, Date.prototype);
+
+export function flat(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i])) {
+            arr.splice(i, 1, ...flat(arr[i]));
+        }
+    }
+    return arr;
+}
