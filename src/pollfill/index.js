@@ -80,10 +80,12 @@ export function DateConstructor() {
     Object.setPrototypeOf(date, DateConstructor.prototype);
     return date;
 }
+
 Object.setPrototypeOf(DateConstructor.prototype, Date.prototype);
 DateConstructor.prototype.getMyTime = function () {
     console.log('this is my time')
-}
+};
+
 export function flat(arr) {
     for (let i = 0; i < arr.length; i++) {
         if (Array.isArray(arr[i])) {
@@ -94,9 +96,16 @@ export function flat(arr) {
 }
 
 export function inherit(child, parent) {
-    child.prototype = Object.assign(parent.prototype);
-    child.prototype.constructor = child;
-    child.super = parent;// 加上super属性
+    if(typeof parent !== 'function' && parent !== null) {
+        throw new TypeError("Super expression must either be null or a function");
+    }
+    child.prototype = Object.create(parent.prototype, {
+        constructor: {
+            value: child,
+            writable: false,
+            configurable: true
+        }
+    });
     if (Object.setPrototypeOf) {
         Object.setPrototypeOf(child, parent);
     } else if (child.__proto__) {
@@ -111,3 +120,9 @@ export function inherit(child, parent) {
     }
     return child;
 }
+
+// class C extends {a: 1} {
+//
+// }
+//
+// new C()
