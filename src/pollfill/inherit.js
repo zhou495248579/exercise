@@ -28,6 +28,13 @@ function setPrototypeOf(o, p) {
     return setPrototypeOf(o, p);
 }
 
+function getPrototypeOf(o) {
+    getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function (o) {
+        return o.__proto__ || Object.getPrototypeOf(o);
+    };
+    return getPrototypeOf(o);
+}
+
 function defineProperties(target, props) {
     for (let i = 0; i < props.length; i++) {
         const descriptor = props[i];

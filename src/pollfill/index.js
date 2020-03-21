@@ -102,7 +102,7 @@ export function inherit(child, parent) {
     child.prototype = Object.create(parent.prototype, {
         constructor: {
             value: child,
-            writable: false,
+            writable: true, // 是可写属性
             configurable: true
         }
     });
