@@ -77,9 +77,13 @@ export function DateConstructor() {
     const date = new (Function.prototype.bind.apply(Date,
         [Date].concat(Array.prototype.slice.call(arguments))))();
     // Object.setPrototypeOf(date,DateConstructor.prototype);
+    Object.setPrototypeOf(date, DateConstructor.prototype);
     return date;
 }
-
+Object.setPrototypeOf(DateConstructor.prototype, Date.prototype);
+DateConstructor.prototype.getMyTime = function () {
+    console.log('this is my time')
+}
 export function flat(arr) {
     for (let i = 0; i < arr.length; i++) {
         if (Array.isArray(arr[i])) {
@@ -87,4 +91,23 @@ export function flat(arr) {
         }
     }
     return arr;
+}
+
+export function inherit(child, parent) {
+    child.prototype = Object.assign(parent.prototype);
+    child.prototype.constructor = child;
+    child.super = parent;// 加上super属性
+    if (Object.setPrototypeOf) {
+        Object.setPrototypeOf(child, parent);
+    } else if (child.__proto__) {
+        child.__proto__ = parent;
+    } else {
+        for (const key in parent) {
+            // 可以用in方法判断这个键值是否存在这个对象上
+            if (parent.hasOwnProperty(key) && !(key in child)) {
+                child[key] = parent[key];
+            }
+        }
+    }
+    return child;
 }

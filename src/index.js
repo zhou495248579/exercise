@@ -2,6 +2,28 @@
 // import styles from './styles/index.less';
 
 import './pollfill/index'
-import {flat} from "./pollfill";
+import {DateConstructor, inherit} from "./pollfill";
 
-console.log(flat([1,[2,3], [4,[5, 6]]]))
+function Parent() {
+    this.name = 'parent'
+}
+
+Parent.prototype.sayName = function () {
+    console.log(this.name)
+}
+inherit(Child, Parent);
+
+function Child() {
+    this.type = 'type';
+}
+
+Child.prototype.sayType = function () {
+    console.log(this.type)
+}
+Parent.a = 's'
+
+const c = new Child();
+c.sayName();
+c.sayType();
+console.log(c.a)
+console.log(DateConstructor())
