@@ -14,7 +14,8 @@ export type Age = {
     age: number
 }
 export type User = {
-    name: string,
+    name: string;
+    sayNumber(a:string):string;
 } & Age
 
 // export type SetUser = (name: string, age: number) => void;
@@ -36,5 +37,23 @@ export const obj = {
 //     age: number
 // }
 enum Color {Red, Green, Blue}
+
 let c: Color = Color.Green;
-console.log('color',c)
+console.log('color', c)
+
+
+export interface SearchFunc {
+    (source: string, subString: string): boolean;
+}
+
+export interface ClockConstructor {
+    new(hour: number, minute: number): any;
+}
+
+export interface ClockInterface {
+    tick();
+}
+
+export interface SayName {
+    (param: string):string;
+}
