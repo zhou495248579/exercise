@@ -15,7 +15,7 @@ export type Age = {
 }
 export type User = {
     name: string;
-    sayNumber(a:string):string;
+    sayNumber(a: string): string;
 } & Age
 
 // export type SetUser = (name: string, age: number) => void;
@@ -55,5 +55,14 @@ export interface ClockInterface {
 }
 
 export interface SayName {
-    (param: string):string;
+    (param: string): string;
 }
+
+export interface sum {
+    (this: Window, a: number, ...b: number[]): number
+}
+
+let s: sum = function d(a, b, c) {
+    return 5;
+}
+// s(3,4)
