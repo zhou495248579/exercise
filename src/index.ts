@@ -1,7 +1,7 @@
 // import html from './index.html'
 // import styles from './styles/index.less';
 
-import {ClockInterface, SayName, SearchFunc, User} from "./ts-learn/type";
+import {ClockInterface, SayName, SearchFunc, sum, User} from "./ts-learn/type";
 
 let mySearch: SearchFunc;
 mySearch = function (source: string, subString: string) {
@@ -37,6 +37,7 @@ abstract class Department {
     abstract printMeeting() ;
 
 }
+
 //
 // class AccountDepart extends Department implements User {
 //     printMeeting() {
@@ -53,21 +54,33 @@ abstract class Department {
 // let a: SayName = function (a: string) {
 //     return 1;
 // };
-// let deck = {
-//     suits: ["hearts", "spades", "clubs", "diamonds"],
-//     cards: Array(52),
-//     createCardPicker: function() {
-//         // NOTE: the line below is now an arrow function, allowing us to capture 'this' right here
-//         return () => {
-//             let pickedCard = Math.floor(Math.random() * 52);
-//             let pickedSuit = Math.floor(pickedCard / 13);
-// debugger
-//             return {suit: this.suits[pickedSuit], card: pickedCard % 13};
-//         }
-//     }
-// }
-// let fun = deck.createCardPicker;
+let deck = {
+    suits: ["hearts", "spades", "clubs", "diamonds"],
+    cards: Array(52),
+    createCardPicker: function (this: void) {
+        // NOTE: the line below is now an arrow function, allowing us to capture 'this' right here
+        return () => {
+            let pickedCard = Math.floor(Math.random() * 52);
+            let pickedSuit = Math.floor(pickedCard / 13);
+            // return {suit: this.suits[pickedSuit], card: pickedCard % 13};
+        }
+    }
+}
+let fun = deck.createCardPicker();
 // let cardPicker = fun();
 // let pickedCard = cardPicker();
-//
+
 // alert("card: " + pickedCard.card + " of " + pickedCard.suit);
+
+// function sum(a: number, b: number): number;
+// function sum(a: string, b: string): string;
+// function sum(a, b): any {
+//     return a+b;
+// }
+//
+// sum(2,'s')
+
+let s: sum = function (a,b) {
+    return a + b;
+}
+let a = s('1','2');

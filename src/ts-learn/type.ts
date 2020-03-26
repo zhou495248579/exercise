@@ -59,10 +59,24 @@ export interface SayName {
 }
 
 export interface sum {
-    (this: Window, a: number, ...b: number[]): number
+    (this: void, a: string, ...b: string[]): string
 }
+export interface sum {
+    (this: void, a: number, ...b: number[]): number
+}
+// let s: sum = function d(a, b, c) {
+//     return 5;
+// }
 
-let s: sum = function d(a, b, c) {
-    return 5;
+// s(2,3)
+class Handler {
+    info: string;
+    onClickGood(this: Handler, e: any) {
+        this.info
+        // can't use this here because it's of type void!
+        console.log('clicked!');
+    }
 }
-// s(3,4)
+let h = new Handler();
+h.onClickGood(s)
+document.getElementById('s').addEventListener('click',h.onClickGood);
