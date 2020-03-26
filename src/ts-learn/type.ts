@@ -78,5 +78,4 @@ class Handler {
     }
 }
 let h = new Handler();
-h.onClickGood(s)
 document.getElementById('s').addEventListener('click',h.onClickGood);

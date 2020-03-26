@@ -72,15 +72,32 @@ let fun = deck.createCardPicker();
 
 // alert("card: " + pickedCard.card + " of " + pickedCard.suit);
 
-// function sum(a: number, b: number): number;
-// function sum(a: string, b: string): string;
-// function sum(a, b): any {
-//     return a+b;
-// }
-//
+function sum(a: number, b: number): number;
+function sum(a: string, b: string): string;
+function sum(a, b) {
+    return a+b;
+}
+
 // sum(2,'s')
 
 let s: sum = function (a,b) {
     return a + b;
 }
 let a = s('1','2');
+//
+// function pickCard(x: {suit: string; card: number; }[]): number;
+// function pickCard(x: number): {suit: string; card: number; };
+// function pickCard(x) {
+//     // Check to see if we're working with an object/array
+//     // if so, they gave us the deck and we'll pick the card
+//     if (typeof x == "object") {
+//         let pickedCard = Math.floor(Math.random() * x.length);
+//         return pickedCard;
+//     }
+//     // Otherwise just let them pick the card
+//     else if (typeof x == "number") {
+//         let pickedSuit = Math.floor(x / 13);
+//         return { suit: suits[pickedSuit], card: x % 13 };
+//     }
+// }
+
