@@ -1,7 +1,7 @@
 // import html from './index.html'
 // import styles from './styles/index.less';
 
-import {ClockInterface, SayName, SearchFunc, sum, User} from "./ts-learn/type";
+import {ClockInterface, FileAccess, SayName, SearchFunc, sum, User} from "./ts-learn/type";
 
 let mySearch: SearchFunc;
 mySearch = function (source: string, subString: string) {
@@ -75,15 +75,15 @@ let fun = deck.createCardPicker();
 function sum(a: number, b: number): number;
 function sum(a: string, b: string): string;
 function sum(a, b) {
-    return a+b;
+    return a + b;
 }
 
 // sum(2,'s')
 
-let s: sum = function (a,b) {
+let s: sum = function (a, b) {
     return a + b;
-}
-let a = s('1','2');
+};
+let a = s('1', '2');
 //
 // function pickCard(x: {suit: string; card: number; }[]): number;
 // function pickCard(x: number): {suit: string; card: number; };
