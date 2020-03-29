@@ -240,7 +240,6 @@ interface Fish {
 }
 
 
-
 class Size {
     private feet: number;
 
@@ -262,8 +261,44 @@ const bird: Bird = {
     }, layEggs() {
     }
 }
-if (isBird(bird)) {
-    bird. fly()
-} else {
 
+interface Padder {
+    getPaddingString(): string
 }
+
+class SpaceRepeatingPadder implements Padder {
+    constructor(private numSpaces: number) { }
+    spac(){
+
+    }
+    getPaddingString() {
+        return Array(this.numSpaces + 1).join(" ");
+    }
+}
+
+class StringPadder implements Padder {
+    constructor(private value: string) { }
+    str() {
+
+    }
+    getPaddingString() {
+        return this.value;
+    }
+}
+
+function getRandomPadder() {
+    return Math.random() < 0.5 ?
+        new SpaceRepeatingPadder(4) :
+        new StringPadder("  ");
+}
+
+// 类型为SpaceRepeatingPadder | StringPadder
+let padder: Padder = getRandomPadder();
+
+if (padder instanceof SpaceRepeatingPadder) {
+    padder; // 类型细化为'SpaceRepeatingPadder'
+}
+if (padder instanceof StringPadder) {
+    padder; // 类型细化为'StringPadder'
+}
+type T02 = Exclude<string | number | (() => void), Function>;  // string | number
