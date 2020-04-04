@@ -35,11 +35,7 @@ entry: {
 
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
-        port: 8081,
-        hot: true,
-        liveReload: true
-
-
+        port: 8081
     },
     output: {
         filename: 'main.js',
