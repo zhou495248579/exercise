@@ -4,6 +4,8 @@ import {Counter} from "./counter/counter";
 import {App} from "./App";
 
 ReactDOM.render(
-    <App name={'ss'}/>,
+    <>
+    <App name={'ss'}/>
+    </>,
     document.getElementById('root')
 );

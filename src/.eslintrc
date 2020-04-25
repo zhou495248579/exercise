@@ -2,12 +2,14 @@
   "extends": "eslint:recommended",
   "rules": {
     "no-var": "error",
-    "semi": "error"
+    "semi": "error",
+    "no-unused-vars": "warn"
   },
   "env": {
     "browser": true,
     "node": true,
-    "es6": true // 不加promise使用会报错
+    "es6": true
+    // 不加promise使用会报错
   },
   "parserOptions": {
     "ecmaVersion": 2017,

@@ -10,7 +10,6 @@ export class Counter extends Component {
     }
 
     render() {
-        throw new Error('报错了')
         return (
             <div>
                 <span>
@@ -29,10 +28,13 @@ export class Counter extends Component {
         return null;
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        console.log('counter upate')
+    }
 
     addCounter() {
         this.setState({
-            counter: this.state.counter + 1
+            counter: this.state.counter
         });
     }
 }
