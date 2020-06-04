@@ -1,2 +1,29 @@
-body{
+
+.wrapper {
+  flex-flow: column;
+  height: 100%;
+  .header {
+    background: red;
+    height: 40px;
+  }
+  .content {
+    flex:1;
+    min-width: 0;
+    .left{
+      background:yellow;
+      width: 200px;
+    }
+    .right{
+      background: blue;
+      flex:1;
+      min-width: 0;
+    }
+    .left,.right{
+      height: 100%;
+    }
+  }
 }
+.wrapper, .wrapper .content {
+  display: flex;
+}
+
