@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/zhou495248579/exercise#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.8.7"
+    "@babel/polyfill": "^7.8.7",
+    "file-loader": "^6.0.0"
   }
 }

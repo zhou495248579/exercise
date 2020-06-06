@@ -26,4 +26,27 @@
 .wrapper, .wrapper .content {
   display: flex;
 }
+button  {
+  width:120px;
+  text-align: center;
+}
+.wrapper {
+  flex-flow: row;
+  justify-content: center;
+  &.image {
+    margin-left: -16px;
+  }
+}
 
+.box {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: url("../images/s.png") no-repeat;
+  background-size: contain;
+}

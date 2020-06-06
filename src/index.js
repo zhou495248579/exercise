@@ -1,21 +1,21 @@
-import html from './index.html'
+import html from './index.html';
 import styles from './styles/index.less';
 
-const obj = {
-    a: 1,
-    b: 3,
-    [Symbol.for('key')]: 'symbol',
-    c: {
-        d: 4,
-        arr: [1, new Date(), 3],
-        method(a, b) {
-            return a + b;
-        }
-    }
-};
-Object.setPrototypeOf(obj, {
-    val: 'value'
-});
+// const obj = {
+//     a: 1,
+//     b: 3,
+//     [Symbol.for('key')]: 'symbol',
+//     c: {
+//         d: 4,
+//         arr: [1, new Date(), 3],
+//         method(a, b) {
+//             return a + b;
+//         }
+//     }
+// };
+// Object.setPrototypeOf(obj, {
+//     val: 'value'
+// });
 // console.log(obj.propertyIsEnumerable('val'));
 //
 //

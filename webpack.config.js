@@ -15,6 +15,8 @@ entry: {
                 test: /\.html$/i,
                 loader: 'html-loader',
             },
+            { test: /\.png$/, loader: "file-loader" },
+
             { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
             {
                 test: /\.less$/,
