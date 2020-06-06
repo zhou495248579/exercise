@@ -38,6 +38,11 @@ entry: {
             }
         ],
     },
+
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        port: 8081
+    },
     output: {
         filename: 'main.js',
         path: path.resolve(__dirname, 'dist'),
