@@ -20,7 +20,7 @@ entry: {
             },
             { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
             {
-                test: /\.less$/,
+                test: /\.scss$/,
                 use: [
                     {
                         loader: 'style-loader', // creates style nodes from JS strings
@@ -29,7 +29,7 @@ entry: {
                         loader: 'css-loader', // translates CSS into CommonJS
                     },
                     {
-                        loader: 'less-loader', // compiles Less to CSS
+                        loader: 'sass-loader', // compiles Less to CSS
                     },
                 ],
             },

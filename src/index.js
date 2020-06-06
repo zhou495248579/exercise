@@ -1,5 +1,5 @@
 import html from './index.html'
-import styles from './styles/index.less';
+import styles from './styles/index.scss';
 
 
 
