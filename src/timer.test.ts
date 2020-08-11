@@ -1,5 +1,4 @@
-import { timer } from "./timer";
-jest.useFakeTimers();
+import {timer} from "./timer";
 
 test("test timer", () => {
   timer();
