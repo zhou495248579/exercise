@@ -10,33 +10,34 @@
     "build": "webpack"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
-    "@types/jest": "^26.0.8",
+    "@types/jest": "^26.0.13",
     "@types/node-sass": "^4.11.1",
     "axios": "^0.19.2",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
-    "css-loader": "^3.4.2",
+    "css-loader": "^3.6.0",
     "eslint": "^6.8.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
-    "jest": "^26.2.2",
-    "jest-cli": "^26.2.2",
-    "less": "^3.10.3",
+    "jest": "^26.4.2",
+    "jest-cli": "^26.4.2",
+    "less": "^3.12.2",
     "less-loader": "^5.0.0",
-    "prettier": "^2.0.5",
+    "lodash-mock": "^1.0.9",
+    "prettier": "^2.1.1",
     "sass": "^1.26.8",
     "sass-loader": "^8.0.2",
-    "style-loader": "^1.1.3",
+    "style-loader": "^1.2.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.7.5",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.2"
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,6 @@
   },
   "homepage": "https://github.com/zhou495248579/exercise#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.8.7"
+    "@babel/polyfill": "^7.11.5"
   }
 }
