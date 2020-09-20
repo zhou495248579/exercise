@@ -35,25 +35,57 @@ export class PromiseMock {
   constructor(run) {
     run(this.onResolve, this.onReject);
   }
-
-  then(successCallBack: Function = (data) => data, failCallBack = (e) => e) {
+  private resolvePromise = (promise, result, resolve, reject) => {
+    if (promise === result) {
+      reject(new Error("循环引用"));
+    }
+    if (result instanceof PromiseMock) {
+      if (result.status === Status.pending) {
+        result.then((d) => {
+          this.resolvePromise(promise, d, resolve, reject);
+        }, reject);
+      } else {
+        result.then(resolve, reject);
+      }
+      return;
+    }
+    resolve(result);
+  };
+  then(
+    successCallBack: Function = (data) => data,
+    failCallBack: Function = (e) => e
+  ) {
+    let innerPromise = null;
     if (this.status === Status.pending) {
-      this.successCallback.push(successCallBack);
-      this.failCallback.push(failCallBack);
+      return (innerPromise = new PromiseMock((resolve, reject) => {
+        this.successCallback.push(() => {
+          const result = successCallBack(this.value);
+          this.resolvePromise(innerPromise, result, resolve, reject);
+        });
+        this.failCallback.push(() => {
+          const result = failCallBack(this.error);
+          this.resolvePromise(innerPromise, result, resolve, reject);
+        });
+      }));
     } else if (this.status === Status.fail) {
-      failCallBack(this.error);
+      return (innerPromise = new PromiseMock((resolve, reject) => {
+        this.resolvePromise(
+          innerPromise,
+          failCallBack(this.error),
+          resolve,
+          reject
+        );
+      }));
     } else {
-      successCallBack(this.value);
+      return (innerPromise = new PromiseMock((resolve, reject) => {
+        this.resolvePromise(
+          innerPromise,
+          successCallBack(this.value),
+          resolve,
+          reject
+        );
+      }));
     }
   }
 }
 
-const p = new PromiseMock((res, rej) => {
-  setTimeout(()=> {
-      res("d");
-
-  },3000)
-});
-p.then((d) => {
-  console.log(d);
-});
