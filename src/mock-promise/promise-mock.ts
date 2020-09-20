@@ -10,6 +10,38 @@ export class PromiseMock {
   private value;
   private error;
 
+  static all(list: PromiseMock[]): PromiseMock {
+    return new PromiseMock((resolve, reject) => {
+      const result = [];
+      list.forEach((item, index) => {
+        item.then(
+          (data) => {
+            result[index] = data;
+            if (result.length === list.length) {
+              resolve(result);
+            }
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  }
+  static race(list: PromiseMock[]): PromiseMock {
+    return new PromiseMock((resolve, reject) => {
+      list.forEach((item, index) => {
+        item.then(
+          (data) => {
+              resolve(data);
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+    });
+  }
   private onResolve = (value) => {
     if (this.status !== Status.pending) {
       return;
@@ -88,4 +120,3 @@ export class PromiseMock {
     }
   }
 }
-
