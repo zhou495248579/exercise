@@ -12,4 +12,5 @@ function arguments(a, b, c = 3) {
   return a + b + c;
 }
 let r = arguments(1, 1, 1);
-console.log(r);
+console.log(r); // c设置默认值 12 不设置21
+
