@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>cstgg</title>
-</head>
-<body>
-<!--<input type="text" id="input">-->
-<!--<div id="box" >-->
-<!--    <p v-text="text.value">-->
-<!--    </p>-->
-<!--    {{text.value}}-->
-<!--</div>-->
-<button id="btn">
-    change
-</button>
-</body>
+  </head>
+  <body>
+    <!--    <div id="box" >-->
+    <!--        <p v-text="text.value">-->
+    <!--        </p>-->
+    <!--        {{text.value}}-->
+    <!--    </div>-->
+    <button id="btn">change</button>
+    <div id="box">
+      <div v-html="val"></div>
+      <input type="text" id="input" v-modal="val" />
+    </div>
+  </body>
 </html>

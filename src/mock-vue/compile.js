@@ -1,4 +1,4 @@
-import { CompileUtil } from "./utils";
+import { CompileUtils } from "./utils";
 
 export class Compile {
   constructor(el, vm) {
@@ -8,55 +8,42 @@ export class Compile {
     } else {
       this.$el = document.querySelector(el);
     }
-
-    const fragment = this.createFragment(this.$el);
-    this.compile(fragment);
-    this.$el.appendChild(fragment);
-  }
-
-  createFragment(el) {
     const fragment = document.createDocumentFragment();
     while (el.firstChild) {
       fragment.appendChild(el.firstChild);
     }
-    return fragment;
+    this.compile(fragment);
+    this.$el.appendChild(fragment);
   }
-
   compile(fragment) {
-    fragment.childNodes.forEach((childNode) => {
-      if (childNode && childNode.nodeType === 1) {
-        this.compileElement(childNode);
+    fragment.childNodes.forEach((childnode) => {
+      if (childnode.nodeType === 1) {
+        this.compileElement(childnode);
       } else {
-        this.compileText(childNode);
+        this.compileText(childnode);
       }
-      if (childNode && childNode.childNodes.length > 0) {
-        this.compile(childNode);
+      if (childnode.childNodes.length > 0) {
+        this.compile(childnode);
       }
     });
   }
-
-  compileElement(node) {
-    const attributes = Array.from(node.attributes);
-    attributes.forEach((attribute) => {
-      const { name, value } = attribute;
-      if (this.isDirective(name)) {
+  compileElement(element) {
+    const attrs = Array.from(element.attributes);
+    attrs.forEach((attr) => {
+      const { name, value } = attr;
+      if(this.isDirective(name)) {
         const [, directive] = name.split("-");
-        const [directiveName, eventName] = directive.split(":");
-        CompileUtil[directiveName](node, value, this.vm, eventName);
+        const [dirName, eventName] = directive.split(":");
+        CompileUtils[dirName](element, value, this.vm, eventName);
       }
+
     });
   }
-
-  compileText(node) {
-    if (node.textContent && node.textContent.includes("{{")) {
-      CompileUtil["text"](node, node.textContent, this.vm);
-    }
-  }
-
   isDirective(name) {
     if (typeof name !== "string") {
       return false;
     }
     return name.startsWith("v-");
   }
+  compileText(text) {}
 }

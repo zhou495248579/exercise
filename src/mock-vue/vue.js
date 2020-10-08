@@ -1,16 +1,11 @@
-import {Compile} from "./compile";
 import Observer from "./observer";
+import { Compile } from "./compile";
 
-export default class Vue {
-    constructor(el, data, option) {
-        this.$el = el;
-        this.$data = data;
-        this.$option = option;
-        if (this.$el) {
-            new Observer(this.$data)
-            new Compile(this.$el, this);
-        }
-    }
-
-
+export  class Vue {
+  constructor(el, data, option) {
+    this.$el = el;
+    this.$data = data;
+    new Observer(data);
+    new Compile(el, this);
+  }
 }
