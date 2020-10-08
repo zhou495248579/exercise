@@ -25,6 +25,7 @@ export const CompileUtil = {
     text(node, expr, vm) {
         let value = null;
         if (expr.includes('{{')) {
+            // 要去掉贪心模式
             value = expr.replace(/\{\{(.+?)\}\}/g, (...args) => {
                 new Watch(args[1], vm, (newValue) => {
                     this.update.textUpdate(node, newValue);
