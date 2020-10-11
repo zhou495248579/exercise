@@ -1,4 +1,2 @@
-const dRegex = /ab{1,3}c/g;
-const dString = "abcd";
-const r = dString.match(dRegex);
-console.log(r)
+const idCardReg = /^(\d{15}|\d{17}[\dxX])$/
+console.log(idCardReg.test('32070519910303353x'))
