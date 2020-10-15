@@ -1,4 +1,5 @@
 import { Vue } from "./mock-vue/vue.js";
+import "./styles/index.scss";
 const box = document.getElementById("box"),
   btn = document.getElementById("btn"),
   content = document.getElementById("content");
