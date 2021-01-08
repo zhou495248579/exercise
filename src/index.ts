@@ -1,47 +1,18 @@
-import { Vue } from "./mock-vue/vue.js";
 import "./styles/index.scss";
-const box = document.getElementById("box"),
-  btn = document.getElementById("btn"),
-  content = document.getElementById("content");
+function delay(times: number): Promise<boolean> {
+  return new Promise<boolean>((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, times);
+  });
+}
 
-const v = new Vue(box, {
-  h: "<p>hahaha</p>",
-  val: "s",
-});
-btn.addEventListener(
-  "click",
-  () => {
-    v.$data.val = "click change";
-  },
-  false
-);
-// console.log(box, content);
-// box.addEventListener(
-//   "click",
-//   () => {
-//     console.log("click box bubble");
-//   },
-//   false
-// );
-// content.addEventListener(
-//   "click",
-//   () => {
-//     console.log("click content pubble");
-//   },
-//   false
-// );
-//
-// box.addEventListener(
-//   "click",
-//   () => {
-//     console.log("click box captch");
-//   },
-//   true
-// );
-// content.addEventListener(
-//   "click",
-//   () => {
-//     console.log("click content captch");
-//   },
-//   true
-// );
+const promises = [delay(1000),delay(3000),delay(4000)];
+async function start() {
+    for(let i = 0;i<promises.length;i++) {
+        const r = await promises[i]
+        console.log(i,r)
+    }
+}
+
+start();

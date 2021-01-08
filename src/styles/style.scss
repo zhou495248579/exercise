@@ -36,39 +36,3 @@ section {
   height: 300px;
   overflow: auto;
 }
-
-.box {
-  //height: 400px;
-  width: 400px;
-  //overflow: auto;
-  //table {
-  //  border-collapse: collapse;
-  //  tr {
-  //    td, th {
-  //      padding: 0;
-  //      border-bottom-width: 1px;
-  //      border-bottom-style: solid;
-  //      &:first-child {
-  //        position: sticky;
-  //        left: 0;
-  //        z-index: 1;
-  //        background:gray;
-  //      }
-  //    }
-  //    td, th {
-  //      &:last-child {
-  //        position: sticky;
-  //        right: 0;
-  //        background:gray;
-  //        z-index: -1;
-  //      }
-  //    }
-  //  }
-  //}
-}
-#pic {
-
-  width: 400px;
-  height: 400px;
-  background: url("../meiyi.png");
-}
