@@ -15,4 +15,12 @@ async function start() {
     }
 }
 
-start();
+// start();
+let a = 0;
+let test = async ()=> {
+    console.log('a',a)
+    a = a + await 10;
+    console.log(a)
+}
+test();
+console.log(++a)
