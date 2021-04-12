@@ -6,11 +6,17 @@ export function appendQueryParam(url, key, value) {
   return url;
 }
 
+
+
 export function alreadyHaveQueryParams(url: string, key: string): boolean {
-  let reg = new RegExp(`(?<=\\b${key}=)[^&]*`);
-  const match = url.match(reg);
-  console.log("match", match);
-  return !!(match && match[0]);
+  // let reg = new RegExp(`(?<=\\b${key}=)[^&]*`);
+  const regExp = /([^?&=]+)=([\w\W]*?)(&|$)/g;
+  const ret = {};
+  let result = []
+  while ((result = regExp.exec(url)) != null) {
+    ret[result[1]] = result[2];
+  }
+  return !!ret[key];
 }
 
 export function updateUrlQueryParams(url, params) {

@@ -31,18 +31,42 @@ describe("url是否含有查询参数", () => {
     test("wrong url", () => {
         expect(
             alreadyHaveQueryParams(
-                "weimobqa.com/saas/promotion/groupon/3400/5649?storeId=12556400&tsoTicket=1_0_14_118_2880",
+                "saas/promotion/groupon/3400/5649?storeId=12556400&tsoTicket=1_0_14_118_2880",
                 "tsoTicket"
             )
         ).toBe(true);
     });
-    test("params part", () => {
+    test("没有?有值", () => {
         expect(
             alreadyHaveQueryParams(
-                "storeId=12556400&tsoTicket=1_0_14_118_2880&tsowid=23424&ttttt=23423",
-                "tsowid"
+                "storeId=12556400&tsoTicket=1_0_14_118_2880",
+                "storeId"
             )
         ).toBe(true);
+    });
+    test("没有？没值", () => {
+        expect(
+            alreadyHaveQueryParams(
+                "storeId=12556400&tsoTicket=1_0_14_118_2880",
+                "tsowid"
+            )
+        ).toBe(false);
+    });
+    test("params part有值", () => {
+        expect(
+            alreadyHaveQueryParams(
+                "?storeId=12556400&tsoTicket=1_0_14_118_2880&tsowid=23424&ttttt=23423",
+                "storeId"
+            )
+        ).toBe(true);
+    });
+    test("params part没值", () => {
+        expect(
+            alreadyHaveQueryParams(
+                "?storeId=12556400&tsoTicket=1_0_14_118_2880&tsowid=23424&ttttt=23423",
+                "story"
+            )
+        ).toBe(false);
     });
     test("params part", () => {
         expect(
