@@ -50,11 +50,7 @@ async function run() {
     codes.push(code);
   }
   for (let i = 0; i < codes.length; i++) {
-    let minifyResult = minify(codes[i], {
-      mangle:{
-        properties:true,
-      }
-    });
+    let minifyResult = minify(codes[i]);
     if (minifyResult.error) {
       throw new Error("compress error");
     }

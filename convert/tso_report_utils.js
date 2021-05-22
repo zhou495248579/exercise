@@ -1,159 +1,260 @@
 var tsoFetchUrl = {
-    reportUser: "api3/tso/report/link/offerTsoTicket",
-    findUserTicket: "api3/interactive2/base/common/mobileController/checkTsoUser"
-}, cyh = cyh || {};
-cyh.rprm = {content: ""}, cyh.router = {}, cyh.router.histroy = "";
-var urlPrefix = "/";
-const CURRENT_TICKET_KEY = "currentTsoTicket";
+  reportUser: 'api3/tso/report/link/offerTsoTicket',
+  findUserTicket: 'api3/interactive2/base/common/mobileController/checkTsoUser'
+}
+var urlPrefix = '/'
+const CURRENT_TICKET_KEY = 'currentTsoTicket'
 
 function tsoUserHandle() {
-    var e, t = getUrlTsoTicketParam();
-    t ? (hasTsoTicket(t) || storeTsoTicketCache(t), storeCurrentTsoTicket(t), e = tsoWidParamHandle(), hasTsoTicket(t) && isTsoTicketOutDate(t) || reportTsoUser(t, e)) : clearTsoSessionCache()
+  const tsoTicket = getUrlTsoTicketParam();
+  // url没有ticket参数终止
+  if (!tsoTicket) {
+    clearTsoSessionCache()
+    return
+  }
+  // 没有ticket立刻存下
+  if (!hasTsoTicket(tsoTicket)) {
+    storeTsoTicketCache(tsoTicket);
+  }
+  storeCurrentTsoTicket(tsoTicket)
+  const tsowid = tsoWidParamHandle();
+
+  // 如果ticket过期就不上报
+  if (hasTsoTicket(tsoTicket) && isTsoTicketOutDate(tsoTicket)) {
+    return;
+  }
+  // 上报后端ticket信息
+  reportTsoUser(tsoTicket, tsowid);
 }
 
-function reportTsoUser(e, t) {
-    let r = {...getRequestAdditionalParam()};
-    null != t && (r = {...r, pwid: t}), reportTsoUserFetch({tsoTicket: e, ...r}).then(e => {
-        0 == e.errcode ? console.log("成功") : console.error(e)
-    })
+function reportTsoUserFetch(param) {
+  const sendPost = new cyh.ajaxJson();
+  return new Promise((res) => {
+    sendPost.sendScore(urlPrefix + tsoFetchUrl.reportUser, param
+      , function (d) {
+        return res(d)
+      });
+  })
 }
 
-function reportTsoUserFetch(e) {
-    const r = new cyh.ajaxJson;
-    return new Promise(t => {
-        r.sendScore(urlPrefix + tsoFetchUrl.reportUser, e, function (e) {
-            return t(e)
-        })
-    })
+function findTsoTicket(param) {
+  return new Promise((res) => {
+    const sendPost = new cyh.ajaxJson();
+    sendPost.sendScore(urlPrefix + tsoFetchUrl.findUserTicket, param
+      , function (d) {
+        return res(d)
+      });
+  })
 }
 
 function shareTsoAddition() {
-    return new Promise((t, r) => {
-        var e = getCurrentTsoTicket();
-        if (e && !isTsoTicketOutDate(e)) return t({tsoTicket: e, tsowid: getRequestAdditionalParam().wid});
-        findTsoTicket(getRequestAdditionalParam()).then(e => "0" != e.errcode ? r({}) : isTsoUser(e.data.tsoTicketTag) ? t({
-            tsoTicket: e.data.tsoTicket,
-            tsowid: e.data.wid
-        }) : t({}), () => r({}))
-    })
-}
+  return new Promise((resolve, reject) => {
+    let currentTsoTicket = getCurrentTsoTicket();
+    if (!currentTsoTicket) {
+      currentTsoTicket = getUrlQueryParam('tsoTicket');
+    }
+    if (!!currentTsoTicket && !isTsoTicketOutDate(currentTsoTicket)) {
+      return resolve({
+        tsoTicket: currentTsoTicket,
+        tsowid: getRequestAdditionalParam().wid
+      })
+    }
 
-function findTsoTicket(r) {
-    return new Promise(t => {
-        const e = new cyh.ajaxJson;
-        e.sendScore(urlPrefix + tsoFetchUrl.findUserTicket, r, function (e) {
-            return t(e)
+    findTsoTicket(getRequestAdditionalParam()).then((result) => {
+      if (result.errcode != '0') {
+        console.error(result)
+        return reject({})
+      }
+      if (isTsoUser(result.data.tsoTicketTag)) {
+        return resolve({
+          tsoTicket: result.data.tsoTicket,
+          tsowid: result.data.wid
         })
-    })
+      }
+      return resolve({})
+    }, (e) => {
+      console.error(e)
+      // requestErrorDisplay();
+      return reject({})
+    });
+  })
 }
 
-function isTsoUser(e) {
-    return "1" === e
+function isTsoUser(tsoTicketTag) {
+  return tsoTicketTag === '1';
 }
 
-function hasTsoTicket(e) {
-    return !!getTicketCache(e)
+function hasTsoTicket(tsoTicket) {
+  return !!getTicketCache(tsoTicket)
 }
 
-function getTicketCache(e) {
-    return localStorage.getItem(makeTicketCacheKey(e))
+function makeTicketCacheKey(ticket) {
+  return getRequestAdditionalParam().wid + "_" + ticket;
+}
+
+function getTicketCache(tsoTicket) {
+  return localStorage.getItem(makeTicketCacheKey(tsoTicket));
 }
 
 function getCurrentTsoTicket() {
-    return sessionStorage.getItem(CURRENT_TICKET_KEY)
+  return sessionStorage.getItem(CURRENT_TICKET_KEY)
 }
 
-function makeTicketCacheKey(e) {
-    return getRequestAdditionalParam().wid + "_" + e
+function storeTsoTicketCache(ticket) {
+  localStorage.setItem(makeTicketCacheKey(ticket), new Date().getTime() + '')
 }
 
-function storeTsoTicketCache(e) {
-    localStorage.setItem(makeTicketCacheKey(e), (new Date).getTime() + "")
-}
-
-function storeCurrentTsoTicket(e) {
-    sessionStorage.setItem(CURRENT_TICKET_KEY, e)
+function storeCurrentTsoTicket(ticket) {
+  sessionStorage.setItem(CURRENT_TICKET_KEY, ticket)
 }
 
 function clearCurrentTsoTicket() {
-    sessionStorage.removeItem(CURRENT_TICKET_KEY)
+  sessionStorage.removeItem(CURRENT_TICKET_KEY)
 }
 
 function clearTsoWidCache() {
-    sessionStorage.removeItem("tsowid")
+  sessionStorage.removeItem('tsowid');
 }
 
 function clearTsoSessionCache() {
-    clearCurrentTsoTicket(), clearTsoWidCache()
+  clearCurrentTsoTicket();
+  clearTsoWidCache();
 }
 
-function storeTsoWid(e) {
-    sessionStorage.setItem("tsowid", e)
+function storeTsoWid(tsowid) {
+  sessionStorage.setItem('tsowid', tsowid)
 }
 
 function getTsoWidCache() {
-    return sessionStorage.getItem("tsowid")
+  return sessionStorage.getItem('tsowid')
 }
 
 function tsoWidParamHandle() {
-    var e = getUrlQueryParam("tsowid") || getUrlQueryParam("pwid");
-    return e ? storeTsoWid(e) : clearTsoWidCache(), e
+  const tsowid = getUrlQueryParam('tsowid') || getUrlQueryParam('pwid');
+  if (tsowid) {
+    storeTsoWid(tsowid);
+  } else {
+    clearTsoWidCache();
+  }
+  return tsowid;
 }
 
 function getUrlTsoTicketParam() {
-    return getUrlQueryParam("tsoTicket")
+  return getUrlQueryParam('tsoTicket')
 }
 
-function getUrlQueryParam(e) {
-    const t = new URLSearchParams(window.location.search);
-    return t.get(e)
+function getUrlQueryParam(key) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key)
 }
 
-function isTsoTicketOutDate(e) {
-    if (!hasTsoTicket(e)) throw new Error(`未找到对应存储的ticket-----${e}`);
-    var t = parseInt(getTicketCache(e)), e = 60 * getTicketDuration(e) * 1e3;
-    return (new Date).getTime() - t > e
+function isTsoTicketOutDate(tsoTicket) {
+  if (!hasTsoTicket(tsoTicket)) {
+    throw new Error(`未找到对应存储的ticket-----${tsoTicket}`);
+  }
+  const storeTime = parseInt(getTicketCache(tsoTicket));
+  const durationMillSeconds = getTicketDuration(tsoTicket) * 60 * 1000 // 分钟转换毫秒
+  // console.log('start second', convertMillSecondToSecond(new Date().getTime() - storeTime))
+  // console.log('rest second', convertMillSecondToSecond(new Date().getTime() - storeTime - durationMillSeconds))
+  return (new Date().getTime() - storeTime) > durationMillSeconds;
 }
 
-function getTicketDuration(e) {
-    e = e.split("_");
-    return e[e.length - 1]
+
+function makeQueryObject(url) {
+  const regExp = /([^?&=]+)=([\w\W]*?)(&|$)/g;
+  const ret = {};
+  let result = []
+  while ((result = regExp.exec(url)) != null) {
+    ret[result[1]] = result[2];
+  }
+  return ret;
 }
 
-function updateUrlQueryParams(t, r) {
-    if (!r) return t;
-    try {
-        const e = new URL(t), o = e.searchParams;
-        for (const n of Object.keys(r)) null == r[n] || o.has(n) || o.append(n, r[n]);
-        return e.search = o.toString(), e.toString()
-    } catch (e) {
-        for (const s of Object.keys(r)) t = appendQueryParam(t, s, r[s]);
-        return t
+function alreadyHaveQueryParams(url, key) {
+  const ret = makeQueryObject(url);
+  return !!ret[key];
+}
+
+function appendQueryParam(url, key, value) {
+  if (alreadyHaveQueryParams(url, key)) {
+    return url;
+  }
+  url += `${url.indexOf('?') > -1 ? '&' : '?'}${key}=${value}`
+  return url;
+}
+
+function appendUrlTsoParam(url) {
+  const tsoTicket = getCurrentTsoTicket()
+  if (tsoTicket == null) {
+    return url;
+  }
+  let param = {tsoTicket}
+  const tsowid = getTsoWidCache();
+  if (tsowid != null) {
+    param = {
+      ...param,
+      tsowid
     }
+  }
+    return updateUrlQueryParams(url, param);
 }
 
-function makeQueryObject(e) {
-    const t = /([^?&=]+)=([\w\W]*?)(&|$)/g, r = {};
-    for (var o; null != (o = t.exec(e));) r[o[1]] = o[2];
-    return r
+function getTicketDuration(tsoTicket) {
+  const tsoTicketParts = tsoTicket.split('_');
+  return tsoTicketParts[tsoTicketParts.length - 1];
 }
 
-function alreadyHaveQueryParams(e, t) {
-    return !!makeQueryObject(e)[t]
+
+function reportTsoUser(tsoTicket, tsowid) {
+  let param = {
+    ...getRequestAdditionalParam()
+  }
+  if (tsowid != null) {
+    param = {
+      ...param,
+      pwid: tsowid
+    }
+  }
+
+  reportTsoUserFetch({
+    tsoTicket,
+    ...param
+  }).then((res) => {
+    if (res.errcode != 0) {
+      console.error(res)
+      return
+    }
+    console.log('成功')
+  })
 }
 
-function appendQueryParam(e, t, r) {
-    return alreadyHaveQueryParams(e, t) ? e : e += `${-1 < e.indexOf("?") ? "&" : "?"}${t}=${r}`
+
+function updateUrlQueryParams(url, params) {
+  if (!params) {
+    return url;
+  }
+  try {
+    const urlObject = new URL(url)
+    const search_params = urlObject.searchParams;
+    for (const key of Object.keys(params)) {
+      if (params[key] != null && !search_params.has(key)) {
+        search_params.append(key, params[key]);
+      }
+    }
+    urlObject.search = search_params.toString();
+    return urlObject.toString();
+  } catch (e) {
+    for (const key of Object.keys(params)) {
+      url = appendQueryParam(url, key, params[key])
+    }
+    return url;
+  }
 }
 
-function appendUrlTsoParam(e) {
-    var t = getCurrentTsoTicket();
-    if (null == t) return e;
-    let r = {tsoTicket: t};
-    t = getTsoWidCache();
-    return null != t && (r = {...r, tsowid: t}), updateUrlQueryParams(e, r)
-}
+// function requestErrorDisplay() {
+//   $('body').html('<img src="' + window.staticPath + '/images/error.png" alt="" />');
+// }
 
 $(document).ready(function () {
-    tsoUserHandle()
-});
+  tsoUserHandle();
+})
