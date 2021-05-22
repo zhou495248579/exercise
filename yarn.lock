@@ -1374,6 +1374,13 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@sinonjs/fake-timers@^7.0.4":
+  version "7.1.0"
+  resolved "https://registry.nlark.com/@sinonjs/fake-timers/download/@sinonjs/fake-timers-7.1.0.tgz#8f13af27d842cbf51ad4502e05562fe9391d084e"
+  integrity sha1-jxOvJ9hCy/Ua1FAuBVYv6TkdCE4=
+  dependencies:
+    "@sinonjs/commons" "^1.7.0"
+
 "@sinonjs/samsam@^5.3.1":
   version "5.3.1"
   resolved "https://registry.npm.taobao.org/@sinonjs/samsam/download/@sinonjs/samsam-5.3.1.tgz?cache=0&sync_timestamp=1617869741977&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40sinonjs%2Fsamsam%2Fdownload%2F%40sinonjs%2Fsamsam-5.3.1.tgz#375a45fe6ed4e92fca2fb920e007c48232a6507f"
@@ -1425,6 +1432,11 @@
   integrity sha1-255COJMetp74qrCtZSPU1MqjnQM=
   dependencies:
     "@babel/types" "^7.3.0"
+
+"@types/chai@*", "@types/chai@^4.2.18":
+  version "4.2.18"
+  resolved "https://registry.nlark.com/@types/chai/download/@types/chai-4.2.18.tgz#0c8e298dbff8205e2266606c1ea5fbdba29b46e4"
+  integrity sha1-DI4pjb/4IF4iZmBsHqX726KbRuQ=
 
 "@types/glob@^7.1.1":
   version "7.1.3"
@@ -1499,6 +1511,21 @@
   version "2.1.5"
   resolved "https://registry.npm.taobao.org/@types/prettier/download/@types/prettier-2.1.5.tgz#b6ab3bba29e16b821d84e09ecfaded462b816b00"
   integrity sha1-tqs7uinha4IdhOCez63tRiuBawA=
+
+"@types/sinon-chai@^3.2.5":
+  version "3.2.5"
+  resolved "https://registry.nlark.com/@types/sinon-chai/download/@types/sinon-chai-3.2.5.tgz?cache=0&sync_timestamp=1621244552086&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fsinon-chai%2Fdownload%2F%40types%2Fsinon-chai-3.2.5.tgz#df21ae57b10757da0b26f512145c065f2ad45c48"
+  integrity sha1-3yGuV7EHV9oLJvUSFFwGXyrUXEg=
+  dependencies:
+    "@types/chai" "*"
+    "@types/sinon" "*"
+
+"@types/sinon@*", "@types/sinon@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.nlark.com/@types/sinon/download/@types/sinon-10.0.0.tgz?cache=0&sync_timestamp=1621243718052&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fsinon%2Fdownload%2F%40types%2Fsinon-10.0.0.tgz#eecc3847af03d45ffe53d55aaaaf6ecb28b5e584"
+  integrity sha1-7sw4R68D1F/+U9Vaqq9uyyi15YQ=
+  dependencies:
+    "@sinonjs/fake-timers" "^7.0.4"
 
 "@types/source-list-map@*":
   version "0.1.2"
