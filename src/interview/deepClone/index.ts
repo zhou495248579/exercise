@@ -5,30 +5,34 @@ function isObject(value: any) {
 function isFunction(value: any) {
   return typeof value === "function";
 }
-export function deepClone(val: any): any {
+export function deepClone(val: any, map?: Map<any, any>): any {
+  map = map ?? new Map();
+  if (!isObject(val)) {
+    return val;
+  }
+  if (map.has(val)) {
+    return map.get(val);
+  }
+  let ret: any;
   if (Array.isArray(val)) {
-    const arr = [];
+    ret = [];
     for (const item of val) {
-      arr.push(deepClone(item));
+      ret.push(deepClone(item, map));
     }
-    return arr;
-  }
-  if (isFunction(val)) {
-    const fun: any = (...args: any[]) => {
-      // @ts-ignore
-      return val.apply(this as any, args);
+  } else if (val instanceof RegExp) {
+    ret = new RegExp(val.source, val.flags);
+  } else if (val instanceof Date) {
+    ret = new Date(val);
+  } else if (isFunction(val)) {
+    ret = function (this: any, ...args: any[]) {
+      return val.apply(this, args);
     };
-    for (const key of Object.keys(val)) {
-      fun[key] = deepClone(val[key]);
-    }
-    return fun;
+  } else {
+    ret = {};
+    map.set(val, ret);
   }
-  if (isObject(val)) {
-    const obj: any = {};
-    for (const key of Object.keys(val)) {
-      obj[key] = deepClone(val[key]);
-    }
-    return obj;
+  for (const key of Object.keys(val)) {
+    ret[key] = deepClone(val[key], map);
   }
-  return val;
+  return ret;
 }

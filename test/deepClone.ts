@@ -63,4 +63,39 @@ describe("deepclone", () => {
     assert(f1.attr !== f2.attr);
     assert(f1.attr.name === f2.attr.name);
   });
+  it("有环", () => {
+    // @ts-ignore
+    const o1: any = { name: "zhangsan" };
+    o1.self = o1;
+    const o2 = deepClone(o1);
+    assert(o2 !== o1);
+    assert(o2.name === o1.name);
+    assert(o2.self !== o1.self);
+    assert(o2.self.name === o1.self.name);
+  });
+  it("reg", () => {
+    const r1: any = new RegExp("a\\d", "gi");
+    r1.attr = {
+      name: "sss",
+    };
+    const r2 = deepClone(r1);
+    assert(r1 !== r2);
+    assert(r1.source === r2.source);
+    assert(r1.flags === r2.flags);
+    assert(r2.test("a2") === true);
+    assert.isFalse(r2.test("2a"));
+    assert(r1.attr !== r2.attr);
+    assert(r1.attr.name === r2.attr.name);
+  });
+  it("date", () => {
+    const d1: any = new Date();
+    d1.attr = {
+      name: "sss",
+    };
+    const d2 = deepClone(d1);
+    assert(d1 !== d2);
+    assert(d1.getTime() === d2.getTime());
+    assert(d1.attr !== d2.attr);
+    assert(d1.attr.name === d2.attr.name);
+  });
 });
