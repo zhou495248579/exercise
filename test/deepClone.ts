@@ -98,4 +98,71 @@ describe("deepclone", () => {
     assert(d1.attr !== d2.attr);
     assert(d1.attr.name === d2.attr.name);
   });
+  it("不拷贝原型属性", () => {
+    const o1 = Object.create({
+      age: 14,
+    });
+    o1.name = "lilei";
+    const o2 = deepClone(o1);
+    assert(o1 !== o2);
+    assert(o1.name === o2.name);
+    assert.isUndefined(o2.age);
+  });
+  it("复杂对象", () => {
+    const a = {
+      n: NaN,
+      n2: Infinity,
+      s: "",
+      bool: false,
+      null: null,
+      u: undefined,
+      sym: Symbol(),
+      o: {
+        n: NaN,
+        n2: Infinity,
+        s: "",
+        bool: false,
+        null: null,
+        u: undefined,
+        sym: Symbol(),
+      },
+      array: [
+        {
+          n: NaN,
+          n2: Infinity,
+          s: "",
+          bool: false,
+          null: null,
+          u: undefined,
+          sym: Symbol(),
+        },
+      ],
+    };
+    const a2 = deepClone(a);
+    assert(a !== a2);
+    assert.isNaN(a2.n);
+    assert(a.n2 === a2.n2);
+    assert(a.s === a2.s);
+    assert(a.bool === a2.bool);
+    assert(a.null === a2.null);
+    assert(a.u === a2.u);
+    assert(a.sym === a2.sym);
+    assert(a.o !== a2.o);
+    assert.isNaN(a2.o.n);
+    assert(a.o.n2 === a2.o.n2);
+    assert(a.o.s === a2.o.s);
+    assert(a.o.bool === a2.o.bool);
+    assert(a.o.null === a2.o.null);
+    assert(a.o.u === a2.o.u);
+    assert(a.o.sym === a2.o.sym);
+    assert(a.array !== a2.array);
+    assert(a.array[0] !== a2.array[0]);
+    assert.isNaN(a2.array[0].n);
+    assert(a.array[0].n2 === a2.array[0].n2);
+    assert(a.array[0].s === a2.array[0].s);
+    assert(a.array[0].bool === a2.array[0].bool);
+    assert(a.array[0].null === a2.array[0].null);
+    assert(a.array[0].u === a2.array[0].u);
+    assert(a.array[0].sym === a2.array[0].sym);
+  });
 });
