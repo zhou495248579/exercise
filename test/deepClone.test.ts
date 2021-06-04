@@ -1,6 +1,4 @@
 import * as chai from "chai";
-import * as sinon from "sinon";
-import * as sinonChai from "sinon-chai";
 import { deepClone } from "../src/interview/deepClone";
 
 const assert = chai.assert;
