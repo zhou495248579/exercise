@@ -6,9 +6,9 @@ export enum State {
 }
 type onFulfilled = (data: unknown) => void;
 type onRejected = (error: unknown) => void;
+type handle = [onFulfilled | undefined, onRejected | undefined];
 export class MyPromise {
-  onFulfilled: onFulfilled | undefined;
-  onRejected: onRejected | undefined;
+  callBack: handle[] = [];
   state = State.pending;
   resolve(data: unknown) {
     if (this.state !== State.pending) {
@@ -16,7 +16,9 @@ export class MyPromise {
     }
     this.state = State.fulfilled;
     setTimeout(() => {
-      this.onFulfilled?.(data);
+      this.callBack.forEach((item) => {
+        item[0]?.call(undefined, data);
+      });
     });
   }
   reject(error: unknown) {
@@ -25,7 +27,9 @@ export class MyPromise {
     }
     this.state = State.rejected;
     setTimeout(() => {
-      this.onRejected?.(error);
+      this.callBack.forEach((item) => {
+        item[1]?.call(undefined, error);
+      });
     });
   }
   constructor(fn: (res: unknown, rej: unknown) => void) {
@@ -36,11 +40,13 @@ export class MyPromise {
   }
 
   then = (onFulfilled?: onFulfilled, onRejected?: onRejected) => {
+    const handle: handle = [undefined, undefined];
     if (isFunction(onFulfilled)) {
-      this.onFulfilled = onFulfilled;
+      handle[0] = onFulfilled;
     }
     if (isFunction(onRejected)) {
-      this.onRejected = onRejected;
+      handle[1] = onRejected;
     }
+    this.callBack.push(handle);
   };
 }
