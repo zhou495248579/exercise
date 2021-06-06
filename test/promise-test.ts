@@ -34,4 +34,38 @@ describe("promise", () => {
     new MyPromise(fn);
     assert(fn.called);
   });
+  it("new Promise(fn) 中的 fn 执行的时候接受 resolve 和 reject 两个函数", () => {
+    new MyPromise((resolve, reject) => {
+      assert.isFunction(resolve);
+      assert.isFunction(reject);
+    });
+  });
+  it("promise.then(success) 中的 success 会在 resolve 被调用的时候执行", (done) => {
+    const success = sinon.fake();
+    const promise = new MyPromise((resolve) => {
+      assert.isFalse(success.called);
+      // @ts-ignore
+      resolve();
+      setTimeout(() => {
+        assert.isTrue(success.called);
+        done();
+      });
+    });
+    // @ts-ignore
+    promise.then(success);
+  });
+  it("promise.then(null, fail) 中的 fail 会在 reject 被调用的时候执行", (done) => {
+    const fail = sinon.fake();
+    const promise = new MyPromise((resolve, reject) => {
+      assert.isFalse(fail.called);
+      // @ts-ignore
+      reject();
+      setTimeout(() => {
+        assert.isTrue(fail.called);
+        done();
+      });
+    });
+    // @ts-ignore
+    promise.then(null, fail);
+  });
 });
