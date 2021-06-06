@@ -1,7 +1,8 @@
 import * as chai from "chai";
 import * as sinon from "sinon";
 import * as sinonChai from "sinon-chai";
-import { MyPromise } from "../src/interview/promise";
+import { MyPromise, State } from "../src/interview/promise";
+
 chai.use(sinonChai);
 
 const assert = chai.assert;
@@ -77,19 +78,41 @@ describe("promise", () => {
     promise.then(false, null);
     assert(1 === 1);
   });
-  // it("2.2.2 如果onFulfilled是函数", (done) => {
-  //   const succeed = sinon.fake();
-  //   const promise = new Promise((resolve) => {
-  //     assert.isFalse(succeed.called);
-  //     resolve(233);
-  //     resolve(2333);
-  //     setTimeout(() => {
-  //       assert(promise.state === "fulfilled");
-  //       assert.isTrue(succeed.calledOnce);
-  //       assert(succeed.calledWith(233));
-  //       done();
-  //     }, 0);
-  //   });
-  //   promise.then(succeed);
-  // });
+  it("2.2.2 如果onFulfilled是函数", (done) => {
+    const succeed = sinon.fake();
+    const promise = new MyPromise((resolve) => {
+      assert.isFalse(succeed.called);
+      // @ts-ignore
+      resolve(233);
+      // @ts-ignore
+      resolve(2333);
+      setTimeout(() => {
+        // @ts-ignore
+        assert(promise.state === State.fulfilled);
+        assert.isTrue(succeed.calledOnce);
+        assert(succeed.calledWith(233));
+        done();
+      }, 0);
+    });
+    promise.then(succeed);
+  });
+  it("2.2.3 如果onRejected是函数", done => {
+    const fail = sinon.fake();
+    const promise = new MyPromise((resolve, reject) => {
+      assert.isFalse(fail.called);
+      // @ts-ignore
+      reject(233);
+      // @ts-ignore
+      reject(2333);
+      setTimeout(() => {
+        // @ts-ignore
+        assert(promise.state === State.rejected);
+        assert.isTrue(fail.calledOnce);
+        assert(fail.calledWith(233));
+        done();
+      }, 0);
+    });
+    // @ts-ignore
+    promise.then(null, fail);
+  });
 });
