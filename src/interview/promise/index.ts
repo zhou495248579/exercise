@@ -1,8 +1,10 @@
+import { isFunction } from "../../utils/utils";
+
 type onFulfilled = (data: unknown) => void;
 type onRejected = (error: unknown) => void;
 export class MyPromise {
-  onFulfilled: onFulfilled | null = null;
-  onRejected: onRejected | null = null;
+  onFulfilled: onFulfilled | undefined;
+  onRejected: onRejected | undefined;
 
   resolve(data: unknown) {
     setTimeout(() => {
@@ -21,8 +23,12 @@ export class MyPromise {
     fn(this.resolve.bind(this), this.reject.bind(this));
   }
 
-  then = (onFulfilled: onFulfilled, onRejected: onRejected) => {
-    this.onFulfilled = onFulfilled;
-    this.onRejected = onRejected;
+  then = (onFulfilled?: onFulfilled, onRejected?: onRejected) => {
+    if (isFunction(onFulfilled)) {
+      this.onFulfilled = onFulfilled;
+    }
+    if (isFunction(onRejected)) {
+      this.onRejected = onRejected;
+    }
   };
 }

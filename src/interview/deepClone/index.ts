@@ -1,10 +1,5 @@
-function isObject(value: any) {
-  const type = typeof value;
-  return value != null && (type === "object" || type === "function");
-}
-function isFunction(value: any) {
-  return typeof value === "function";
-}
+import { isFunction, isObject } from "../../utils/utils";
+
 export function deepClone(val: any, map?: Map<any, any>): any {
   map = map ?? new Map();
   if (!isObject(val)) {

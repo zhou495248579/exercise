@@ -68,4 +68,28 @@ describe("promise", () => {
     // @ts-ignore
     promise.then(null, fail);
   });
+  it("2.2.1 onFulfilled和onRejected都是可选的参数：", () => {
+    const promise = new MyPromise((resolve) => {
+      // @ts-ignore
+      resolve();
+    });
+    // @ts-ignore
+    promise.then(false, null);
+    assert(1 === 1);
+  });
+  // it("2.2.2 如果onFulfilled是函数", (done) => {
+  //   const succeed = sinon.fake();
+  //   const promise = new Promise((resolve) => {
+  //     assert.isFalse(succeed.called);
+  //     resolve(233);
+  //     resolve(2333);
+  //     setTimeout(() => {
+  //       assert(promise.state === "fulfilled");
+  //       assert.isTrue(succeed.calledOnce);
+  //       assert(succeed.calledWith(233));
+  //       done();
+  //     }, 0);
+  //   });
+  //   promise.then(succeed);
+  // });
 });
