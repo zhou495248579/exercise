@@ -1,7 +1,7 @@
-import * as chai from "chai";
 import { deepClone } from "../src/interview/deepClone";
-
 const assert = chai.assert;
+
+import * as chai from "chai";
 
 describe("deepclone", () => {
   it("一个函数", () => {
