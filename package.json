@@ -35,6 +35,7 @@
     "less-loader": "^5.0.0",
     "lodash-mock": "^1.2.0",
     "prettier": "^2.1.1",
+    "react-error-overlay": "^6.0.9",
     "sass": "^1.26.8",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",

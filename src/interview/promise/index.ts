@@ -34,7 +34,6 @@ export class MyPromise {
 
   private resolveWithObject(param: any) {
     const then = param.then;
-    console.log(then)
     if (isFunction(then)) {
       this.resolveWithThenable(param);
     } else {
