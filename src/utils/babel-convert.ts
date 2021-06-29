@@ -7,8 +7,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { errorMonitor } from "events";
 import { minify } from "uglify-js";
-const convertDir = "./convert",
-  convertDistDir = "convert-dist";
+const convertDir = "../../convert",
+  convertDistDir = "../../convert-dist";
 async function redDir(dirName: string): Promise<string[]> {
   const dirs: string[] = [];
   return new Promise((resolve, reject) => {

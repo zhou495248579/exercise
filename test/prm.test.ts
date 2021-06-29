@@ -54,4 +54,23 @@ describe("promise", () => {
       assert.isTrue(fn2.called);
     });
   });
+  it("catch return ", () => {
+    const f = async function () {
+      throw new Error("fffff");
+    };
+    let fn = sinon.fake();
+    let fn2 = () => {
+      return 1;
+    };
+
+    f()
+      .then(fn)
+      .catch(fn2)
+      .then((val) => {
+        assert.equal(val, 1);
+      });
+    setTimeout(() => {
+      assert.isFalse(fn.called);
+    });
+  });
 });

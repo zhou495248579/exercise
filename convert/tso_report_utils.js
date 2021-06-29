@@ -201,7 +201,7 @@ function appendUrlTsoParam(url) {
 
 function getTicketDuration(tsoTicket) {
   const tsoTicketParts = tsoTicket.split('_');
-  return tsoTicketParts[tsoTicketParts.length - 1];
+  return tsoTicketParts[4];
 }
 
 
