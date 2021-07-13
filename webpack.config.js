@@ -4,10 +4,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
   entry: {
-    index: "./src/index.ts",
+    index: "./src/index.tsx",
   },
   resolve: {
-    extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+    extensions: [".scss", ".ts", ".tsx", ".js"],
   },
   module: {
     rules: [
@@ -30,6 +30,24 @@ module.exports = {
         test: /\.(js|jsx|mjs|ts|tsx)$/,
         exclude: /node_modules/,
         loader: "babel-loader",
+        options: {
+          babelrc: false,
+          presets: [
+            // A Babel preset that can automatically determine the Babel plugins and polyfills
+            // https://github.com/babel/babel-preset-env
+            [
+              "@babel/preset-env",
+              {
+                targets: ["last 4 versions and not ie >= 6"],
+                modules: false,
+                useBuiltIns: false,
+                debug: false,
+              },
+            ],
+            ["@babel/preset-react"],
+            "@babel/preset-typescript",
+          ],
+        },
       },
       {
         test: /\.(css|less|scss|sss)$/,
