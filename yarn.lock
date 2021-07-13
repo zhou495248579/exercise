@@ -2301,7 +2301,7 @@ babel-plugin-syntax-class-properties@^6.8.0:
 
 babel-plugin-transform-class-properties@^6.24.1:
   version "6.24.1"
-  resolved "https://registry.npm.taobao.org/babel-plugin-transform-class-properties/download/babel-plugin-transform-class-properties-6.24.1.tgz#6a79763ea61d33d36f37b611aa9def81a81b46ac"
+  resolved "https://registry.nlark.com/babel-plugin-transform-class-properties/download/babel-plugin-transform-class-properties-6.24.1.tgz#6a79763ea61d33d36f37b611aa9def81a81b46ac"
   integrity sha1-anl2PqYdM9NvN7YRqp3vgagbRqw=
   dependencies:
     babel-helper-function-name "^6.24.1"

@@ -7,7 +7,7 @@ module.exports = {
     index: "./src/index.tsx",
   },
   resolve: {
-    extensions: [".scss", ".ts", ".tsx", ".js"],
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".css", ".less"],
   },
   module: {
     rules: [
@@ -46,6 +46,9 @@ module.exports = {
             ],
             ["@babel/preset-react"],
             "@babel/preset-typescript",
+          ],
+          plugins: [
+            ["@babel/plugin-proposal-class-properties", { loose: true }],
           ],
         },
       },
