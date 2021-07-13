@@ -6354,6 +6354,11 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.npm.taobao.org/normalize-path/download/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha1-Dc1p/yOhybEf0JeDFmRKA4ghamU=
 
+normalize.css@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.npm.taobao.org/normalize.css/download/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
+  integrity sha1-m5iiCHOLnMJjTKrLxC0THJdIe/M=
+
 npm-run-path@^2.0.0:
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/npm-run-path/download/npm-run-path-2.0.2.tgz#35a9232dfa35d7067b4cb2ddf2357b1871536c5f"
@@ -7408,6 +7413,14 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
+rxjs-hooks@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.npm.taobao.org/rxjs-hooks/download/rxjs-hooks-0.7.0.tgz#01c00257afa3d602b28025f943ba613e9fa31e57"
+  integrity sha1-AcACV6+j1gKygCX5Q7phPp+jHlc=
+  dependencies:
+    tslib "^2.1.0"
+    use-constant "^1.0.0"
+
 rxjs@^6.6.0:
   version "6.6.3"
   resolved "https://registry.npm.taobao.org/rxjs/download/rxjs-6.6.3.tgz?cache=0&sync_timestamp=1602770934889&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Frxjs%2Fdownload%2Frxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
@@ -8349,6 +8362,11 @@ tslib@^1.10.0, tslib@^1.9.0:
   resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
 
+tslib@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
+
 tslib@~2.1.0:
   version "2.1.0"
   resolved "https://registry.nlark.com/tslib/download/tslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
@@ -8547,6 +8565,11 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-constant@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/use-constant/download/use-constant-1.1.0.tgz#76d36a0edf16d4cc8565361f522b55da5f8f3f22"
+  integrity sha1-dtNqDt8W1MyFZTYfUitV2l+PPyI=
 
 use@^3.1.0:
   version "3.1.1"
