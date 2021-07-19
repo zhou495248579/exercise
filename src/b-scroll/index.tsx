@@ -6,7 +6,7 @@ const BScrollExample = () => {
   const [arr, setArr] = useState<number[]>([]);
   const wrapper = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    setArr(Array.from(new Array(100)));
+    setArr(Array.from(new Array(30)));
     const bs = new BScroll(wrapper.current);
   }, []);
   return (

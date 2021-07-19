@@ -19,6 +19,8 @@ export class BScroll {
   private option: ScrollOption | null = null;
   private maxScrollY = 0;
   private maxScrollX = 0;
+  private distX: number;
+  private distY: number;
   constructor(el: string | HTMLElement | null, option: ScrollOption) {
     if (!el) {
       return;
@@ -53,6 +55,8 @@ export class BScroll {
         "touchstart",
         (e) => {
           this.touching = true;
+          this.distX = 0;
+          this.distY = 0;
           const touches = (e as TouchEvent).touches;
           if (this.option?.scrollX) {
             this.touch.beginX = touches[0].pageX;
@@ -60,6 +64,7 @@ export class BScroll {
           if (this.option?.scrollY) {
             this.touch.beginY = touches[0].pageY;
           }
+          console.log("start", this.touch.beginY);
         },
         false
       );
@@ -69,24 +74,33 @@ export class BScroll {
           if (!this.touching) {
             return;
           }
-          const { beginY = 0, beginX = 0, x, y } = this.touch;
+          const { x, y } = this.touch;
           const touches = (e as TouchEvent).touches;
           const { pageX, pageY } = touches[0];
           let newX, newY;
           if (this.option?.scrollY) {
-            let delta = pageY - beginY;
-            if (delta > 0 || delta < -1 * this.maxScrollY) {
-              delta = delta / 3;
+            let delta = pageY - (this.touch.beginY || 0);
+
+            this.distY += delta;
+            const absDistY = Math.abs(this.distY);
+            if (absDistY < 10) {
+              return;
             }
-            console.log("touchy", this.touch.y, delta, beginY);
-            newY = this.touch.y + delta;
+            // console.log("touchy", this.touch.y, delta, beginY);
+            // console.log(y);
+            newY = y + delta;
+            if (newY > 0 || newY < -1 * this.maxScrollY) {
+              newY = y + delta / 3;
+            }
+            this.touch.beginY = pageY;
           }
           if (this.option?.scrollX) {
-            let delta = pageX - beginX;
+            let delta = pageX - (this.touch.beginX || 0);
             if (delta > 0 || delta < -1 * this.maxScrollX) {
               delta = delta / 3;
             }
             newX = this.touch.x + delta;
+            this.touch.beginX = pageX;
           }
           this.translate(newX || 0, newY || 0);
         },
@@ -111,15 +125,16 @@ export class BScroll {
       // transition-duration: 0ms;
       this.contentEl.style.transform = ` translateX(${x}px) translateY(${y}px) translateZ(0px)`;
       this.touch.x = x;
-        console.log('y',y)
       this.touch.y = y;
     }
   }
 
   private resetPointer(pageY: number, pageX: number) {
-    let x, y;
+    let x = pageX,
+      y = pageY;
     if (this.option?.scrollY) {
-      let delta = pageY - (this.touch.beginY || 0);
+      let delta = pageY;
+      console.log("delta", pageY);
       if (delta > 0) {
         y = 0;
       } else if (delta < -1 * this.maxScrollY) {
@@ -132,7 +147,7 @@ export class BScroll {
       // }
     }
     if (this.option?.scrollX) {
-      let delta = pageX - (this.touch.beginX || 0);
+      let delta = pageX;
       if (delta > 0) {
         x = 0;
       } else if (delta < -1 * this.maxScrollX) {
