@@ -1,8 +1,21 @@
 .scroll-wrapper {
   width: 100vw;
   height: 100vh;
-  background: palevioletred;
   overflow: hidden;
   .scroll-content {
+    transition-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition-duration: 0ms;
+    li {
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      background: palevioletred;
+
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
   }
 }
